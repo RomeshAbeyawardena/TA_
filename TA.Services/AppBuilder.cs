@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace TA.Services
@@ -13,6 +14,7 @@ namespace TA.Services
         private TStart Startup => ServiceProvider.GetRequiredService<TStart>();
         private Func<TStart, int> _entryPoint;
         private Func<TStart, Task<int>> _entryPointAsync;
+        private bool _isConfigurationAdded;
 
         private IAppBuilder<TStart> RegisterServicesFromAssemblies(IEnumerable<Assembly> assemblies)
         {
@@ -70,6 +72,12 @@ namespace TA.Services
 
         public IAppBuilder<TStart> RegisterServices(Action<IServiceCollection> serviceRegistration = null)
         {
+            if (!_isConfigurationAdded)
+            {
+                Services.AddSingleton<IConfiguration>(new ConfigurationBuilder().AddJsonFile("app.json").Build());
+                _isConfigurationAdded = true;
+            }
+
             serviceRegistration?.Invoke(Services);
             
             return this;

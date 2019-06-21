@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="Current">
+﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="Current">
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <ApplicationIcon />
@@ -12,5 +12,10 @@
     <ProjectReference Include="..\TA.Contracts\TA.Contracts.csproj" />
     <ProjectReference Include="..\TA.Domains\TA.Domains.csproj" />
     <ProjectReference Include="..\TA.ServiceBroker\TA.ServiceBroker.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="app.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
  </Project>

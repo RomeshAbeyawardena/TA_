@@ -1,9 +1,10 @@
-﻿using TA.Domains.Models;
+﻿using System.Threading.Tasks;
+using TA.Domains.Models;
 
 namespace TA
 {
     public interface ILocationService
     {
-        Location GetLocation();
+        Task<Location> GetLocation();
     }
 }

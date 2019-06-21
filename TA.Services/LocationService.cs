@@ -1,17 +1,22 @@
-﻿using TA.Domains.Models;
+﻿using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using TA.Contracts;
+using TA.Domains.Models;
 
 namespace TA.Services
 {
     public class LocationService : ILocationService
     {
-        public Location GetLocation()
+        private readonly IRepository<Location> _locationRepository;
+
+        public async Task<Location> GetLocation()
         {
-            throw new System.NotImplementedException();
+            return await _locationRepository.DbSet.FirstOrDefaultAsync();
         }
 
-        public LocationService()
+        public LocationService(IRepository<Location> locationRepository)
         {
-            
+            _locationRepository = locationRepository;
         }
     }
 }

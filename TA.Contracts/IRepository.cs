@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace TA
+namespace TA.Contracts
 {
     public interface IRepository<T> where T : class
     {
