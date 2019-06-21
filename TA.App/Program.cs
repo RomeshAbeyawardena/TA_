@@ -1,7 +1,7 @@
-﻿using System.Reflection;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using TA.ServiceBroker;
+using TA.Services;
 
 namespace TA
 {
