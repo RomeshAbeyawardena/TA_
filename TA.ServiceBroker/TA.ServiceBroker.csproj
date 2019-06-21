@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="Current">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+	<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.2.0"></PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TA.Contracts\TA.Contracts.csproj" />
+    <ProjectReference Include="..\TA.Data\TA.Data.csproj" />
+    <ProjectReference Include="..\TA.Domains\TA.Domains.csproj" />
+    <ProjectReference Include="..\TA.Services\TA.Services.csproj" />
+  </ItemGroup>
+ </Project>
