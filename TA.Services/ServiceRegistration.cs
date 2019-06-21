@@ -6,7 +6,7 @@ namespace TA.Services
     {
         public void RegisterServices(IServiceCollection services)
         {
-            services.AddScoped<ILocationService, LocationService>();
+            services.AddScoped<ISiteService, SiteService>();
         }
     }
 }

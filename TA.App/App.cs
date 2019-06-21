@@ -4,17 +4,16 @@ namespace TA
 {
     public class App
     {
-        private readonly ILocationService _locationService;
+        private readonly ISiteService _siteService;
 
-        public App(ILocationService locationService)
+        public App(ISiteService siteService)
         {
-            _locationService = locationService;
+            _siteService = siteService;
         }
 
         public async Task<int> Begin()
         {
-            await Task.Delay(100);
-            await _locationService.GetLocation();
+            var site = await _siteService.GetSite();
             return 0;
         }
     }
