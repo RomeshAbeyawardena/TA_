@@ -14,7 +14,7 @@ namespace TA
         public async Task<int> Begin()
         {
             await Task.Delay(100);
-            _locationService.GetLocation();
+            await _locationService.GetLocation();
             return 0;
         }
     }

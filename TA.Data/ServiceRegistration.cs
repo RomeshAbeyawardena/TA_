@@ -1,4 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using TA.Contracts;
+using TA.Domains.Extensions;
+using TA.Domains.Models;
 
 namespace TA.Data
 {
@@ -6,7 +10,11 @@ namespace TA.Data
     {
         public void RegisterServices(IServiceCollection services)
         {
-            services.AddDbContext<TADbContext>();
+            var applicationSettings = services
+                .GetRequiredService<IApplicationSettings>();
+            services
+                .AddDbContext<TADbContext>(options => options.UseSqlServer(applicationSettings.ConnectionString))
+                .AddScoped<IRepository<Location>, DefaultRepository<TADbContext, Location>>();
         }
     }
 }
