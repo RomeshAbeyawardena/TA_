@@ -6,5 +6,6 @@ namespace TA
     public interface ISiteService
     {
         Task<Site> GetSite();
+        Task<Site> SaveSite(Site site);
     }
 }

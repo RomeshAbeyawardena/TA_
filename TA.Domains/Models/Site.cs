@@ -19,7 +19,6 @@ namespace TA.Domains.Models
         public JObject Attributes
         {
             get =>  JObject.Parse(JsonAttributes);
-            set => JsonAttributes = value.ToString();
         }
     }
 }

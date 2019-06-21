@@ -18,5 +18,11 @@ namespace TA.Services
         {
             return await _siteRepository.DbSet.FirstOrDefaultAsync();
         }
+
+        public async Task<Site> SaveSite(Site site)
+        {
+            return await _siteRepository
+                .SaveChangesAsync(site, s => s.Id);
+        }
     }
 }

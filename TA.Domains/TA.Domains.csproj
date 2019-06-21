@@ -5,5 +5,6 @@
   <ItemGroup>
 	<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.2.0"></PackageReference>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+    <PackageReference Include="WebToolkit.Contracts" Version="1.0.0.3" />
   </ItemGroup>
  </Project>
