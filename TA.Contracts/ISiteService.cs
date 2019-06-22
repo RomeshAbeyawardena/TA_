@@ -7,6 +7,6 @@ namespace TA
     {
         Task<Site> GetSite(string name);
         Task<Site> GetSite(int id);
-        Task<Site> SaveSite(Site site);
+        Task<Site> SaveSite(Site site, bool saveChanges = true);
     }
 }

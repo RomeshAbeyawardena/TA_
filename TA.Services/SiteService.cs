@@ -41,10 +41,10 @@ namespace TA.Services
                 .DbSet.FindAsync(id));
         }
 
-        public async Task<Site> SaveSite(Site site)
+        public async Task<Site> SaveSite(Site site, bool saveChanges = true)
         {
             return Map(await _siteRepository
-                .SaveChangesAsync(Map(site), s => s.Id));
+                .SaveChangesAsync(Map(site), s => s.Id, saveChanges));
         }
     }
 }
