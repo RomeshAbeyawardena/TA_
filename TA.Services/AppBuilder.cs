@@ -32,9 +32,10 @@ namespace TA.Services
 
         private async Task<int> LogException(Exception exception)
         {
+            var defaultForeColour = Console.ForegroundColor;
             Console.ForegroundColor = ConsoleColor.Red;
             await Console.Error.WriteLineAsync($"An error occurred: {exception.Message} Stack Trace: {exception.StackTrace}");
-            Console.ForegroundColor = ConsoleColor.White;
+            Console.ForegroundColor = defaultForeColour;
             return exception.HResult;
         }
 
