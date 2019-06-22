@@ -14,9 +14,16 @@ namespace TA.Services
             _siteRepository = siteRepository;
         }
 
-        public async Task<Site> GetSite()
+        public async Task<Site> GetSite(string name)
         {
-            return await _siteRepository.DbSet.FirstOrDefaultAsync();
+            return await _siteRepository
+                .DbSet.FirstOrDefaultAsync(site => site.Name == name);
+        }
+
+        public async Task<Site> GetSite(int id)
+        {
+            return await _siteRepository
+                .DbSet.FirstOrDefaultAsync(site => site.Id == id);
         }
 
         public async Task<Site> SaveSite(Site site)

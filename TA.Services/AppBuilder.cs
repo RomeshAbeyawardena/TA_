@@ -30,6 +30,14 @@ namespace TA.Services
             return this;
         }
 
+        private async Task<int> LogException(Exception exception)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            await Console.Error.WriteLineAsync($"An error occurred: {exception.Message} Stack Trace: {exception.StackTrace}");
+            Console.ForegroundColor = ConsoleColor.White;
+            return exception.HResult;
+        }
+
         private void Initialise()
         {
             Services
@@ -59,13 +67,15 @@ namespace TA.Services
         public IServiceCollection Services => _serviceCollection ?? (_serviceCollection = new ServiceCollection());
         public IServiceProvider ServiceProvider => Services.BuildServiceProvider();
 
-        private DefaultAppBuilder(Func<TStart, int> entryPoint, Func<TStart, Task<int>> entryPointAsync = null)
+        private DefaultAppBuilder(Func<TStart, int> entryPoint, Func<TStart, 
+            Task<int>> entryPointAsync = null)
         {
             _entryPoint = entryPoint;
             _entryPointAsync = entryPointAsync;
         }
 
-        public static IAppBuilder<TStart> CreateBuilder(Func<TStart, int> entryPoint = null, Func<TStart, Task<int>> entryPointAsync = null)
+        public static IAppBuilder<TStart> CreateBuilder(Func<TStart, int> entryPoint = null, 
+            Func<TStart, Task<int>> entryPointAsync = null)
         {
             return new DefaultAppBuilder<TStart>(entryPoint, entryPointAsync);
         }
@@ -83,22 +93,46 @@ namespace TA.Services
             return this;
         }
 
-        public int Start()
+        public int Start(bool throwOnError = true)
         {
             if(_entryPoint == null && _entryPointAsync == null)
                 throw new NotImplementedException();
-            
-            Initialise();
-            return _entryPoint?.Invoke(Startup) ?? _entryPointAsync(Startup).Result;
+
+            try
+            {
+                Initialise();
+                return _entryPoint?.Invoke(Startup) ?? _entryPointAsync(Startup).Result;
+            }
+            catch (Exception ex)
+            {
+                var result = LogException(ex).Result;
+
+                if (throwOnError)
+                    throw;
+
+                return result;
+            }
         }
 
-        public async Task<int> StartAsync()
+        public async Task<int> StartAsync(bool throwOnError = true)
         {
             if(_entryPointAsync == null)
                 throw new NotImplementedException();
 
-            Initialise();
-            return await _entryPointAsync(Startup);
+            try
+            {
+                Initialise();
+                return await _entryPointAsync(Startup);
+            }
+            catch (Exception ex)
+            {
+                var result = await LogException(ex);
+
+                if (throwOnError)
+                    throw;
+
+                return result;
+            }
         }
     }
 }

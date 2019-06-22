@@ -5,7 +5,8 @@ namespace TA
 {
     public interface ISiteService
     {
-        Task<Site> GetSite();
+        Task<Site> GetSite(string name);
+        Task<Site> GetSite(int id);
         Task<Site> SaveSite(Site site);
     }
 }

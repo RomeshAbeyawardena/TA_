@@ -14,7 +14,8 @@ namespace TA.Data
                 .GetRequiredService<IApplicationSettings>();
             services
                 .AddDbContext<TADbContext>(options => options.UseSqlServer(applicationSettings.ConnectionString))
-                .AddScoped<IRepository<Site>, DefaultRepository<TADbContext, Site>>();
+                .AddScoped<IRepository<Site>, DefaultRepository<TADbContext, Site>>()
+                .AddScoped<IRepository<Asset>, DefaultRepository<TADbContext, Asset>>();
         }
     }
 }
