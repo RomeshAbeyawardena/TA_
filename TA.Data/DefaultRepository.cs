@@ -13,6 +13,7 @@ namespace TA.Data
     {
         private readonly TDbContext _dbContext;
         public IQueryable<T> NoTrackingQuery => DbSet.AsNoTracking();
+        public IQueryable<T> Query => DbSet;
         public DbSet<T> DbSet => _dbContext.Set<T>();
         
         public DbContext Context => _dbContext;
