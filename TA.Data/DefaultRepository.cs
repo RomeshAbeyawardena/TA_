@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TA.Contracts;
+using TA.Domains.Models;
 
 namespace TA.Data
 {
@@ -10,6 +12,7 @@ namespace TA.Data
         where T : class
     {
         private readonly TDbContext _dbContext;
+        public IQueryable<T> NoTrackingQuery => DbSet.AsNoTracking();
         public DbSet<T> DbSet => _dbContext.Set<T>();
         
         public DbContext Context => _dbContext;

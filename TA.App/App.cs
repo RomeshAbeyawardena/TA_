@@ -22,10 +22,10 @@ namespace TA
         public async Task<int> Begin()
         {
             var site = await _siteService.GetSite("mysite");
-
+            site.Attributes = site.Attributes.Append("ManagementViewerPanelId", 2231);
             var asset = await _assetService.GetAsset(site, "FeaturedProducts");
             
-            asset.Attributes = asset.Attributes.Append("ClickSubscriptionId", 22346112);;
+            asset.Attributes = asset.Attributes.Append("ClickSubscriptionId", 2234611242);;
             asset = await _assetService.SaveAsset(asset);
 
             return 0;

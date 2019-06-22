@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,6 +7,7 @@ namespace TA.Contracts
 {
     public interface IRepository<T> where T : class
     {
+        IQueryable<T> NoTrackingQuery { get; }
         DbSet<T> DbSet { get; }
         DbContext Context { get; }
         Task<T> SaveChangesAsync<TProp>(T entry, Func<T, TProp> updateIdentityExpression, bool commitChanges = true);

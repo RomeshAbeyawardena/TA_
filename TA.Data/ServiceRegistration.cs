@@ -13,7 +13,9 @@ namespace TA.Data
             var applicationSettings = services
                 .GetRequiredService<IApplicationSettings>();
             services
-                .AddDbContext<TADbContext>(options => options.UseSqlServer(applicationSettings.ConnectionString))
+                .AddDbContext<TADbContext>(options => options
+                    .UseSqlServer(applicationSettings.ConnectionString)
+                    .EnableSensitiveDataLogging())
                 .AddScoped<IRepository<Site>, DefaultRepository<TADbContext, Site>>()
                 .AddScoped<IRepository<Asset>, DefaultRepository<TADbContext, Asset>>();
         }

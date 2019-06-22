@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using TA.Domains.Models;
+using TA.Domains.Dtos;
 
 namespace TA.Contracts
 {
