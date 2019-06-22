@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 using TA.Contracts;
 using TA.Domains.Extensions;
 using TA.Domains.Models;
@@ -22,19 +23,10 @@ namespace TA
         {
             var site = await _siteService.GetSite("mysite");
 
-            var asset = await _assetService.SaveAsset(new Asset
-            {
-                Active = true,
-                Attributes = DictionaryBuilder<string, object>.Create()
-                    .Add("BannerId", "56755")
-                    .Add("AndersiteId", "ahgf4567")
-                    .ToJObject(),
-                Created = DateTimeOffset.Now,
-                Modified = DateTimeOffset.Now,
-                Key = "FeaturedProducts2",
-                RelativeUrl = "/Featured/Products",
-                Site = site
-            });
+            var asset = await _assetService.GetAsset(site, "FeaturedProducts");
+            
+            asset.Attributes = asset.Attributes.Append("ClickSubscriptionId", 22346112);;
+            asset = await _assetService.SaveAsset(asset);
 
             return 0;
         }

@@ -22,6 +22,11 @@ namespace TA.Services
                 asset.SiteId == site.Id && asset.Key == key);
         }
 
+        public async Task<Asset> GetAsset(int assetId)
+        {
+            return await _assetRepository.DbSet.FindAsync(assetId);
+        }
+
         public async Task<Asset> SaveAsset(Asset asset)
         {
             return await _assetRepository.SaveChangesAsync(asset, a => a.Id);

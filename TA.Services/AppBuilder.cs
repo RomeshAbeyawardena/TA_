@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Internal;
 
 namespace TA.Services
 {
@@ -42,6 +43,7 @@ namespace TA.Services
         private void Initialise()
         {
             Services
+                .AddSingleton<ISystemClock, SystemClock>()
                 .AddSingleton<IAppBuilder<TStart>>(this)
                 .AddSingleton<TStart>();
 

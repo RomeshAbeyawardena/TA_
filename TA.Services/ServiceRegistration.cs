@@ -8,6 +8,7 @@ namespace TA.Services
         public void RegisterServices(IServiceCollection services)
         {
             services
+                .AddSingleton<IDateTimeProvider, DateTimeProvider>()
                 .AddScoped<ISiteService, SiteService>()
                 .AddScoped<IAssetService, AssetService>();
         }

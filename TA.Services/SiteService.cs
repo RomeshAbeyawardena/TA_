@@ -23,7 +23,7 @@ namespace TA.Services
         public async Task<Site> GetSite(int id)
         {
             return await _siteRepository
-                .DbSet.FirstOrDefaultAsync(site => site.Id == id);
+                .DbSet.FindAsync(id);
         }
 
         public async Task<Site> SaveSite(Site site)
