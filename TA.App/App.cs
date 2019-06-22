@@ -22,12 +22,10 @@ namespace TA
         public async Task<int> Begin()
         {
             var site = await _siteService.GetSite("mysite");
-            site.Attributes = site.Attributes.Append("Environment", "Development");
-            site = await _siteService.SaveSite(site, false);
             var asset = await _assetService.GetAsset(site, "FeaturedProducts");
             
-            asset.Attributes = asset.Attributes.Append("ReviewSubscriptionId", 2234611242);;
-            asset = await _assetService.SaveAsset(asset);
+            Console.WriteLine(JObject.FromObject(site));
+            Console.WriteLine(JObject.FromObject(asset));
 
             return 0;
         }
