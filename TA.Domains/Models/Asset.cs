@@ -1,18 +1,20 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using TA.Domains.Contracts;
 
 namespace TA.Domains.Models
 {
-    public class Asset
+    public class Asset : ICreated, IModified
     {
         [Key] public int Id { get; set; }
         public int SiteId { get; set; }
         public string Key { get; set; }
-        public string RelativePath { get; set; }
+        public string RelativeUrl { get; set; }
         public string JsonAttributes { get; set; }
-        public int Active { get; set; }
+        public bool Active { get; set; }
         public DateTimeOffset Created { get; set; }
         public DateTimeOffset Modified { get; set; }
 
@@ -22,7 +24,7 @@ namespace TA.Domains.Models
         public JObject Attributes
         {
             get =>  JObject.Parse(JsonAttributes);
-            set => JsonAttributes = value.ToString();
+            set => JsonAttributes = value.ToString(Formatting.None);
         }
 }
 }

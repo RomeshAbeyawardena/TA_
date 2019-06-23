@@ -1,11 +1,12 @@
 ﻿using System.Threading.Tasks;
-using TA.Domains.Models;
+using TA.Domains.Dtos;
 
 namespace TA
 {
     public interface ISiteService
     {
-        Task<Site> GetSite();
-        Task<Site> SaveSite(Site site);
+        Task<Site> GetSite(string name);
+        Task<Site> GetSite(int id);
+        Task<Site> SaveSite(Site site, bool saveChanges = true);
     }
 }

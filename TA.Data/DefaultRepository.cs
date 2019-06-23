@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TA.Contracts;
+using TA.Domains.Extensions;
+using TA.Domains.Models;
 
 namespace TA.Data
 {
@@ -10,13 +14,16 @@ namespace TA.Data
         where T : class
     {
         private readonly TDbContext _dbContext;
+
+        public IQueryable<T> NoTrackingQuery => DbSet.AsNoTracking();
+        public IQueryable<T> Query => DbSet;
         public DbSet<T> DbSet => _dbContext.Set<T>();
         
         public DbContext Context => _dbContext;
-        public async Task<T> SaveChangesAsync<TProp>(T entry, 
-            Func<T, TProp> updateIdentityExpression, bool commitChanges = true)
+        public async Task<T> SaveChangesAsync(T entry, bool commitChanges = true)
         {
-            if (updateIdentityExpression(entry) == null) 
+            var entries = entry.GetKeyProperties();
+            if (entries.All(e => e.IsDefault())) 
                 await DbSet.AddAsync(entry);
             else
                 DbSet.Update(entry);

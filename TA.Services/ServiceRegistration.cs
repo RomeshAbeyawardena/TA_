@@ -1,4 +1,9 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System;
+using AutoMapper;
+using Microsoft.Extensions.DependencyInjection;
+using TA.Contracts;
+using WebToolkit.Common.Providers;
+using WebToolkit.Contracts.Providers;
 
 namespace TA.Services
 {
@@ -6,7 +11,12 @@ namespace TA.Services
     {
         public void RegisterServices(IServiceCollection services)
         {
-            services.AddScoped<ISiteService, SiteService>();
+            services
+                .AddSingleton<IDateTimeProvider, DateTimeProvider>()
+                .AddSingleton<IMapperProvider, MapperProvider>()
+                .AddScoped<ISiteService, SiteService>()
+                .AddScoped<IAssetService, AssetService>()
+                .AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         }
     }
 }

@@ -13,7 +13,7 @@ namespace TA
         IServiceProvider ServiceProvider { get; }
         IServiceCollection Services { get; }
         IAppBuilder<TStart> RegisterServices(Action<IServiceCollection> serviceRegistration = null);
-        int Start();
-        Task<int> StartAsync();
+        int Start(bool throwOnError = true);
+        Task<int> StartAsync(bool throwOnError = true);
     }
 }
