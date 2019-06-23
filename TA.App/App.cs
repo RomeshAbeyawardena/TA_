@@ -2,11 +2,8 @@
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using TA.Contracts;
-using TA.Domains.Extensions;
-using TA.Domains.Models;
-using WebToolkit.Common.Builders;
 
-namespace TA
+namespace TA.App
 {
     public class App
     {

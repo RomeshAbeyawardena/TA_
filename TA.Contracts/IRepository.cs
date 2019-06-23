@@ -11,6 +11,6 @@ namespace TA.Contracts
         IQueryable<T> Query { get; }
         DbSet<T> DbSet { get; }
         DbContext Context { get; }
-        Task<T> SaveChangesAsync<TProp>(T entry, Func<T, TProp> updateIdentityExpression, bool commitChanges = true);
+        Task<T> SaveChangesAsync(T entry, bool commitChanges = true);
     }
 }

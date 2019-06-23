@@ -10,5 +10,6 @@ namespace TA
             configuration.Bind(this);
         }
         public string ConnectionString { get; set; }
+        public string ApiKey { get; set; }
     }
 }

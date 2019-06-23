@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using TA.Domains.Models;
 using Humanizer;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -19,7 +21,7 @@ namespace TA.Data
             _dateTimeProvider = dateTimeProvider;
         }
 
-        public override EntityEntry<TEntity> Add<TEntity>(TEntity entity)
+        public override Task<EntityEntry<TEntity>> AddAsync<TEntity>(TEntity entity, CancellationToken cancellationToken = new CancellationToken())
         {
             if (entity is ICreated createdEntity)
                 createdEntity.Created = _dateTimeProvider.DateTimeOffSet;
@@ -27,7 +29,12 @@ namespace TA.Data
             if (entity is IModified modifiedEntity)
                 modifiedEntity.Modified = _dateTimeProvider.DateTimeOffSet;
 
-            return base.Add(entity);
+            return base.AddAsync(entity, cancellationToken);
+        }
+
+        public override EntityEntry<TEntity> Add<TEntity>(TEntity entity)
+        {
+            return AddAsync(entity, CancellationToken.None).Result;
         }
 
         public override EntityEntry<TEntity> Update<TEntity>(TEntity entity)

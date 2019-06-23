@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Internal;
+using TA.Domains.Constants;
 
 namespace TA.Services
 {
@@ -87,7 +88,7 @@ namespace TA.Services
         {
             if (!_isConfigurationAdded)
             {
-                Services.AddSingleton<IConfiguration>(new ConfigurationBuilder().AddJsonFile("app.json").Build());
+                Services.AddSingleton<IConfiguration>(new ConfigurationBuilder().AddJsonFile(General.DefaultJsonAppSetting).Build());
                 _isConfigurationAdded = true;
             }
 

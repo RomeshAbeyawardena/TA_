@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TA.Contracts;
 using TA.Domains.Dtos;
@@ -44,7 +43,7 @@ namespace TA.Services
         public async Task<Site> SaveSite(Site site, bool saveChanges = true)
         {
             return Map(await _siteRepository
-                .SaveChangesAsync(Map(site), s => s.Id, saveChanges));
+                .SaveChangesAsync(Map(site), saveChanges));
         }
     }
 }

@@ -48,7 +48,7 @@ namespace TA.Services
 
         public async Task<Asset> SaveAsset(Asset asset, bool saveChanges = true)
         {
-            return Map(await _assetRepository.SaveChangesAsync(Map(asset), a => a.Id, saveChanges));
+            return Map(await _assetRepository.SaveChangesAsync(Map(asset), saveChanges));
         }
 
         public AssetService(IMapperProvider mapperProvider, IRepository<Domains.Models.Asset> assetRepository)
