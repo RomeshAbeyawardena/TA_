@@ -22,5 +22,11 @@ namespace TA.App.Controllers
             var savedSite = await _siteService.SaveSite(mappedSite);
             return Ok(savedSite);
         }
+
+        [HttpGet]
+        public async Task<ActionResult> GetSites(GetSitesViewModel getSitesViewModel)
+        {
+            return Ok(await _siteService.GetSites(getSitesViewModel.ShowInActive));
+        }
     }
 }

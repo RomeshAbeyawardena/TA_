@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Internal;
 using TA.Contracts;
 
-namespace TA.Services
+namespace TA.Services.Providers
 {
     public class DateTimeProvider : IDateTimeProvider
     {

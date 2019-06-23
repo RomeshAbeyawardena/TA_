@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TA.Contracts;
 using TA.Domains.Dtos;
@@ -10,6 +12,11 @@ namespace TA.Services
     {
         private readonly IMapperProvider _mapperProvider;
         private readonly IRepository<Domains.Models.Site> _siteRepository;
+
+        private IEnumerable<Site> Map(IEnumerable<Domains.Models.Site> site)
+        {
+            return _mapperProvider.Map<Domains.Models.Site, Site>(site);
+        }
 
         private Site Map(Domains.Models.Site site)
         {
@@ -44,6 +51,11 @@ namespace TA.Services
         {
             return Map(await _siteRepository
                 .SaveChangesAsync(Map(site), saveChanges));
+        }
+
+        public async Task<IEnumerable<Site>> GetSites(bool showInActive = false)
+        {
+            return Map(await _siteRepository.NoTrackingQuery.Where(a => !showInActive || a.Active).ToArrayAsync());
         }
     }
 }

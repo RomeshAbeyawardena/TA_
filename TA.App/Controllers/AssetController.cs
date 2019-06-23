@@ -12,6 +12,11 @@ namespace TA.App.Controllers
         private readonly ISiteService _siteService;
         private readonly IAssetService _assetService;
 
+        private async Task<Site> GetSiteByName(string name)
+        {
+            return await _siteService.GetSite(name);
+        }
+
         public AssetController(ISiteService siteService, IAssetService assetService)
         {
             _siteService = siteService;
@@ -23,10 +28,17 @@ namespace TA.App.Controllers
         {
             var mappedAsset = Map<AssetViewModel, Asset>(asset);
 
-            mappedAsset.Site = await _siteService.GetSite(asset.SiteName);
+            mappedAsset.Site = await GetSiteByName(asset.SiteName);
 
             return Ok(
                 await _assetService.SaveAsset(mappedAsset));
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> GetAssets(GetAssetsViewModel getAssetsViewModel)
+        {
+            var site = await GetSiteByName(getAssetsViewModel.SiteName);
+            return Ok(_assetService.GetAssets(site));
         }
     }
 }

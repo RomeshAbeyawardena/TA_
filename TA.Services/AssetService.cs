@@ -28,10 +28,10 @@ namespace TA.Services
             return _mapperProvider.Map<Asset, Domains.Models.Asset>(asset);
         }
 
-        public async Task<IEnumerable<Asset>> GetAssets(Site site)
+        public async Task<IEnumerable<Asset>> GetAssets(Site site, bool showInActive = false)
         {
             return Map(await _assetRepository.
-                NoTrackingQuery.Where(asset => asset.SiteId == site.Id).ToArrayAsync());
+                NoTrackingQuery.Where(asset => asset.SiteId != site.Id || !showInActive || site.Active).ToArrayAsync());
         }
 
         public async Task<Asset> GetAsset(Site site, string key)
