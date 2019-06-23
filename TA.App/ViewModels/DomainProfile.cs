@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Newtonsoft.Json.Linq;
 using TA.Domains.Dtos;
 
 namespace TA.App.ViewModels
@@ -7,8 +8,13 @@ namespace TA.App.ViewModels
     {
         public DomainProfile()
         {
-            CreateMap<Asset, AssetViewModel>().ReverseMap();
-            CreateMap<Site, SiteViewModel>().ReverseMap();
+            CreateMap<AssetViewModel, Asset>()
+                .ForMember(member => member.Attributes, 
+                    options => options.MapFrom(member =>JObject.Parse(member.JsonAttributes)));
+
+            CreateMap<SiteViewModel, Site>()
+                .ForMember(member => member.Attributes, 
+                    options => options.MapFrom(member =>JObject.Parse(member.JsonAttributes)));
         }
     }
 }

@@ -10,14 +10,17 @@ namespace TA.Domains.Extensions
     {
         public static IEnumerable<object> GetKeyProperties(this object value)
         {
-            return value.GetType().GetProperties().Where(a => a.GetCustomAttribute(typeof(KeyAttribute)) != null).Select(pi => pi.GetValue(value));
+            return value.GetType().GetProperties()
+                .Where(a => a.GetCustomAttribute(typeof(KeyAttribute)) != null)
+                .Select(pi => pi.GetValue(value)).ToArray();
         }
 
-        
         public static bool IsDefault(this object val)
         {
             switch (val)
             {
+                case byte byteVal:
+                    return byteVal == default;
                 case Guid gUid:
                     return gUid == default;
                 case short shortVal :

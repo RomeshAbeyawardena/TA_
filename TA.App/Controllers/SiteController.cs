@@ -18,7 +18,8 @@ namespace TA.App.Controllers
         [HttpPost, RequiresApiKey]
         public async Task<ActionResult> SaveSite([FromBody] SiteViewModel site)
         {
-            var savedSite = await _siteService.SaveSite(Map<SiteViewModel, Site>(site));
+            var mappedSite = Map<SiteViewModel, Site>(site);
+            var savedSite = await _siteService.SaveSite(mappedSite);
             return Ok(savedSite);
         }
     }

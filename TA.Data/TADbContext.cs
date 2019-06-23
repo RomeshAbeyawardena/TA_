@@ -1,4 +1,6 @@
-﻿using System.Threading;
+﻿using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TA.Domains.Models;
@@ -6,6 +8,7 @@ using Humanizer;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using TA.Contracts;
 using TA.Domains.Contracts;
+using TA.Domains.Extensions;
 
 namespace TA.Data
 {
@@ -39,6 +42,17 @@ namespace TA.Data
 
         public override EntityEntry<TEntity> Update<TEntity>(TEntity entity)
         {
+            var keyProperties = entity.GetKeyProperties().ToArray();
+            
+            var foundEntity = keyProperties.Length > 1 
+                ? Find<TEntity>(keyProperties) 
+                : Find<TEntity>(keyProperties.Single());
+
+            Entry(foundEntity).State = EntityState.Detached;
+
+            if (entity is ICreated createdEntity && foundEntity is ICreated createdFoundEntity)
+                createdEntity.Created = createdFoundEntity.Created;
+
             if (entity is IModified modifiedEntity)
                 modifiedEntity.Modified = _dateTimeProvider.DateTimeOffSet;
 
