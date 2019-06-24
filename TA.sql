@@ -76,6 +76,7 @@ CREATE TABLE [dbo].[TokenPermission](
 			REFERENCES [dbo].[Token]([Id])
 	,[Created] DATETIMEOFFSET NOT NULL
 	,[Expires] DATETIMEOFFSET NOT NULL
+	,CONSTRAINT IQ_TokenPermission UNIQUE([PermissionId], [TokenId])
 )
 
 INSERT INTO [dbo].[TokenPermission] ([PermissionId], [TokenId],[Created],[Expires])
