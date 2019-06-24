@@ -29,7 +29,9 @@ namespace TA.Services
 
         public async Task<Token> GetToken(string tokenKey)
         {
-            return await _tokenRepository.NoTrackingQuery.SingleOrDefaultAsync(token => token.Key == tokenKey);
+            return await _tokenRepository.NoTrackingQuery
+                .Include(token => token.TokenPermissions)
+                .SingleOrDefaultAsync(token => token.Key == tokenKey);
         }
 
 

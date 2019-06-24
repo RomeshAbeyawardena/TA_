@@ -63,7 +63,7 @@ namespace TA.App.Controllers
         {
             var token = await _tokenService.GetToken(generateTokenViewModel.TokenKey);
             token = _tokenService.ClearTokenPermissions(token);
-            token.TokenPermissions = (await AssignTokenPermissions(generateTokenViewModel.Permissions)).ToArray();
+            token.TokenPermissions = (await AssignTokenPermissions(generateTokenViewModel.Permissions)).ToList();
 
             var savedToken = await _tokenService.SaveToken(token);
             return Ok(savedToken);
