@@ -28,7 +28,7 @@ namespace TA.App
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) => WebHost
             .CreateDefaultBuilder<Startup>(args)
             .ConfigureAppConfiguration((hostingContext, config) => config.AddJsonFile(General.DefaultJsonAppSetting))
-            .UseKestrel(options => options.Listen(IPAddress.Any, 5000));
+            .UseKestrel(options => options.Listen(IPAddress.Any, 50000));
 
         public static void RegisterServices(IServiceCollection services)
         {
