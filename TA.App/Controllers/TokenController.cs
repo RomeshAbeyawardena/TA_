@@ -62,7 +62,7 @@ namespace TA.App.Controllers
         public async Task<ActionResult> AssignTokenPermissions([FromBody] GenerateTokenViewModel generateTokenViewModel)
         {
             var token = await _tokenService.GetToken(generateTokenViewModel.TokenKey);
-
+            token = _tokenService.ClearTokenPermissions(token);
             token.TokenPermissions = (await AssignTokenPermissions(generateTokenViewModel.Permissions)).ToArray();
 
             var savedToken = await _tokenService.SaveToken(token);

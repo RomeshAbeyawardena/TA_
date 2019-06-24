@@ -20,6 +20,13 @@ namespace TA.Services
                                                                         && t.Expires > _dateTimeProvider.Now.DateTime);
         }
 
+        public Token ClearTokenPermissions(Token token)
+        {
+            _tokenRepository.DbSet.Attach(token);
+            token.TokenPermissions.Clear();
+            return token;
+        }
+
         public async Task<Token> GetToken(string tokenKey)
         {
             return await _tokenRepository.NoTrackingQuery.SingleOrDefaultAsync(token => token.Key == tokenKey);

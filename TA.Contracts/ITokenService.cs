@@ -16,6 +16,7 @@ namespace TA.Contracts
 
     public interface ITokenService
     {
+        Token ClearTokenPermissions(Token token);
         Task<Token> GetToken(string tokenKey);
         Task<bool> IsValid(Token token);
         Task<bool> HasPermission(Token token, Permission permission);
