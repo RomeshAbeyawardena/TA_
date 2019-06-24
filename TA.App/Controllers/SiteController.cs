@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TA.App.Attributes;
 using TA.App.ViewModels;
+using TA.Contracts;
 using TA.Domains.Dtos;
 
 namespace TA.App.Controllers
@@ -15,7 +16,7 @@ namespace TA.App.Controllers
             _siteService = siteService;
         }
 
-        [HttpPost, RequiresApiKey]
+        [HttpPost, RequiresApiKey(Permission.Create, Permission.Update)]
         public async Task<ActionResult> SaveSite([FromBody] SiteViewModel site)
         {
             var mappedSite = Map<SiteViewModel, Site>(site);

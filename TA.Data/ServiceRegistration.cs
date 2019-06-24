@@ -17,7 +17,9 @@ namespace TA.Data
                     .UseSqlServer(applicationSettings.ConnectionString)
                     .EnableSensitiveDataLogging())
                 .AddScoped<IRepository<Site>, DefaultRepository<TADbContext, Site>>()
-                .AddScoped<IRepository<Asset>, DefaultRepository<TADbContext, Asset>>();
+                .AddScoped<IRepository<Asset>, DefaultRepository<TADbContext, Asset>>()
+                .AddScoped<IRepository<Token>, DefaultRepository<TADbContext, Token>>()
+                .AddScoped<IRepository<TokenPermission>, DefaultRepository<TADbContext, TokenPermission>>();
         }
     }
 }

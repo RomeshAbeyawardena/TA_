@@ -17,6 +17,8 @@ namespace TA.Data
         private readonly IDateTimeProvider _dateTimeProvider;
         public DbSet<Asset> Assets { get; set; }
         public DbSet<Site> Sites { get; set; }
+        public DbSet<Token> Tokens { get; set; }
+        public DbSet<TokenPermission> TokenPermissions { get; set; }
 
         public TADbContext(DbContextOptions options, IDateTimeProvider dateTimeProvider) 
             : base(options)

@@ -42,9 +42,9 @@ CREATE TABLE [dbo].[Token](
 )
 
 DECLARE @dateNow DATETIMEOFFSET = GETDATE()
-
+DECLARE @defaultExpiry DATETIMEOFFSET = DATEADD(YEAR, 4, @dateNow)
 INSERT INTO [dbo].[Token] ([Key],[IsActive],[Created],[Expires])
-	VALUES ('8CD9440BE1148A28D74348A615C9D65F9E93FA8FF52A57ED511A76D43C3D6240',1, @dateNow, DATEADD(YEAR, 4, @dateNow))
+	VALUES ('8CD9440BE1148A28D74348A615C9D65F9E93FA8FF52A57ED511A76D43C3D6240',1, @dateNow, @defaultExpiry)
 
 CREATE TABLE [dbo].[Permission](
 	[Id] INT NOT NULL IDENTITY(1,1)
@@ -54,7 +54,6 @@ CREATE TABLE [dbo].[Permission](
 	,[Created] DATETIMEOFFSET
 	,[Modified] DATETIMEOFFSET
 )
-
 
 SET IDENTITY_INSERT  [dbo].[Permission] ON
 
@@ -77,6 +76,13 @@ CREATE TABLE [dbo].[TokenPermission](
 	,[Created] DATETIMEOFFSET NOT NULL
 	,[Expires] DATETIMEOFFSET NOT NULL
 )
+
+INSERT INTO [dbo].[TokenPermission] ([PermissionId], [TokenId],[Created],[Expires])
+	VALUES (1, 1, @dateNow, @defaultExpiry),
+		(2, 1, @dateNow, @defaultExpiry),
+		(3, 1, @dateNow, @defaultExpiry),
+		(4, 1, @dateNow, @defaultExpiry),
+		(5, 1, @dateNow, @defaultExpiry)
 
 CREATE TABLE [dbo].[Site](
 [Id] INT NOT NULL IDENTITY(1,1)

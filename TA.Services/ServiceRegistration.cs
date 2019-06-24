@@ -17,6 +17,7 @@ namespace TA.Services
                 .AddSingleton<IMapperProvider, MapperProvider>()
                 .AddScoped<ISiteService, SiteService>()
                 .AddScoped<IAssetService, AssetService>()
+                .AddScoped<ITokenService, TokenService>()
                 .AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         }
     }
