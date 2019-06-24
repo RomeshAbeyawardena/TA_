@@ -16,7 +16,7 @@ namespace TA.Services
 
             var hashedBytes = _cryptographyProvider.HashBytes(hashAlgorithm, gUid.Value.ToByteArray());
 
-            return BitConverter.ToString(hashedBytes.ToArray());
+            return BitConverter.ToString(hashedBytes.ToArray()).Replace("-", "");
         }
 
         public TokenKeyGenerator(ICryptographyProvider cryptographyProvider)

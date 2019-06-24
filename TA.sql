@@ -34,7 +34,7 @@ CREATE TABLE [dbo].[User](
 CREATE TABLE [dbo].[Token](
 	 [Id] INT NOT NULL IDENTITY(1,1)
 		CONSTRAINT PK_Token PRIMARY KEY
-	,[Key] VARCHAR(64) NOT NULL
+	,[Key] VARCHAR(200) NOT NULL
 		CONSTRAINT IQ_Token UNIQUE
 	,[IsActive] BIT NOT NULL
 	,[Created] DATETIMEOFFSET NOT NULL
@@ -44,7 +44,7 @@ CREATE TABLE [dbo].[Token](
 DECLARE @dateNow DATETIMEOFFSET = GETDATE()
 DECLARE @defaultExpiry DATETIMEOFFSET = DATEADD(YEAR, 4, @dateNow)
 INSERT INTO [dbo].[Token] ([Key],[IsActive],[Created],[Expires])
-	VALUES ('8CD9440BE1148A28D74348A615C9D65F9E93FA8FF52A57ED511A76D43C3D6240',1, @dateNow, @defaultExpiry)
+	VALUES ('60807141CC6E54CCCC8A72BEA111A95391C86DC5283643FFD4ABA75373987538685F2E4D007007BF915B4524B1F2EC56BA57DF56F3B1C65B971F902A7116A831',1, @dateNow, @defaultExpiry)
 
 CREATE TABLE [dbo].[Permission](
 	[Id] INT NOT NULL IDENTITY(1,1)
@@ -83,7 +83,8 @@ INSERT INTO [dbo].[TokenPermission] ([PermissionId], [TokenId],[Created],[Expire
 		(2, 1, @dateNow, @defaultExpiry),
 		(3, 1, @dateNow, @defaultExpiry),
 		(4, 1, @dateNow, @defaultExpiry),
-		(5, 1, @dateNow, @defaultExpiry)
+		(5, 1, @dateNow, @defaultExpiry),
+		(6, 1, @dateNow, @defaultExpiry)
 
 CREATE TABLE [dbo].[Site](
 [Id] INT NOT NULL IDENTITY(1,1)
