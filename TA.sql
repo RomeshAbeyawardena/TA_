@@ -1,4 +1,13 @@
-﻿IF OBJECT_ID('[dbo].[User]') IS NOT NULL
+﻿IF OBJECT_ID('[dbo].[TokenPermission]') IS NOT NULL
+DROP TABLE [dbo].[TokenPermission]
+
+IF OBJECT_ID('[dbo].[Permission]') IS NOT NULL
+DROP TABLE [dbo].[Permission]
+
+IF OBJECT_ID('[dbo].[Token]') IS NOT NULL
+DROP TABLE [dbo].[Token]
+
+IF OBJECT_ID('[dbo].[User]') IS NOT NULL
 DROP TABLE [dbo].[User]
 
 IF OBJECT_ID('[dbo].[SiteAccess]') IS NOT NULL
@@ -20,6 +29,53 @@ CREATE TABLE [dbo].[User](
 ,[Password] VARBINARY(MAX) NOT NULL
 ,[Created] DATETIMEOFFSET NOT NULL
 ,[Modified] DATETIMEOFFSET NOT NULL
+)
+
+CREATE TABLE [dbo].[Token](
+	 [Id] INT NOT NULL IDENTITY(1,1)
+		CONSTRAINT PK_Token PRIMARY KEY
+	,[Key] VARCHAR(64) NOT NULL
+		CONSTRAINT IQ_Token UNIQUE
+	,[IsActive] BIT NOT NULL
+	,[Created] DATETIMEOFFSET NOT NULL
+	,[Expires] DATETIMEOFFSET NOT NULL
+)
+
+DECLARE @dateNow DATETIMEOFFSET = GETDATE()
+
+INSERT INTO [dbo].[Token] ([Key],[IsActive],[Created],[Expires])
+	VALUES ('8CD9440BE1148A28D74348A615C9D65F9E93FA8FF52A57ED511A76D43C3D6240',1, @dateNow, DATEADD(YEAR, 4, @dateNow))
+
+CREATE TABLE [dbo].[Permission](
+	[Id] INT NOT NULL IDENTITY(1,1)
+		CONSTRAINT PK_Permission PRIMARY KEY
+	,[Name] VARCHAR(200) NOT NULL
+	,[Description] VARCHAR(2000) NOT NULL
+	,[Created] DATETIMEOFFSET
+	,[Modified] DATETIMEOFFSET
+)
+
+
+SET IDENTITY_INSERT  [dbo].[Permission] ON
+
+INSERT INTO [dbo].[Permission]([Id],[Name],[Description],[Created],[Modified])
+	VALUES  (1, 'Create', 'Ability to create', @dateNow, @dateNow),
+			(2, 'Read', 'Ability to read', @dateNow, @dateNow),
+			(3, 'Update', 'Ability to update', @dateNow, @dateNow),
+			(4, 'SoftDelete', 'Ability to soft delete', @dateNow, @dateNow),
+			(5, 'Delete', 'Ability to delete', @dateNow, @dateNow)
+
+SET IDENTITY_INSERT  [dbo].[Permission] OFF
+
+CREATE TABLE [dbo].[TokenPermission](
+	[Id] INT NOT NULL IDENTITY(1,1)
+		CONSTRAINT PK_TokenPermission PRIMARY KEY
+	,[PermissionId] INT NOT NULL
+	,[TokenId] INT NOT NULL
+		CONSTRAINT FK_TokenPermission_Token
+			REFERENCES [dbo].[Token]([Id])
+	,[Created] DATETIMEOFFSET NOT NULL
+	,[Expires] DATETIMEOFFSET NOT NULL
 )
 
 CREATE TABLE [dbo].[Site](

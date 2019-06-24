@@ -4,7 +4,7 @@ using TA.Domains.Models;
 
 namespace TA.Contracts
 {
-    public enum Permission { Create, Read, Update, Delete }
+    public enum Permission { Create = 1, Read = 2, Update = 3, SoftDelete = 4, Delete = 5 }
     public interface ITokenService
     {
         Task<Token> GetToken(string tokenKey);
