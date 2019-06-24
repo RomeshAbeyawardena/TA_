@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TA.Contracts;
@@ -16,7 +17,7 @@ namespace TA.Services
         public async Task<bool> IsValid(Token token)
         {
             return await _tokenRepository.NoTrackingQuery.AnyAsync(t => t.Key == token.Key 
-                                                                        && t.Expires > _dateTimeProvider.DateTimeOffSet.DateTime);
+                                                                        && t.Expires > _dateTimeProvider.Now.DateTime);
         }
 
         public async Task<Token> GetToken(string tokenKey)
@@ -29,7 +30,7 @@ namespace TA.Services
         {
             return await _tokenPermissionRepository.NoTrackingQuery.AnyAsync(tp => tp.TokenId == token.Id 
                                                                                    && tp.PermissionId == (int)permission
-                                                                                   && tp.Expires > _dateTimeProvider.DateTimeOffSet);
+                                                                                   && tp.Expires > _dateTimeProvider.Now);
         }
 
         public async Task<bool> HasPermissions(Token token, IEnumerable<Permission> permissions)
@@ -41,6 +42,21 @@ namespace TA.Services
             }
 
             return true;
+        }
+
+        public Token GenerateToken(string tokenKey, DateTimeOffset expiryDate)
+        {
+            return new Token
+            {
+                Expires = expiryDate,
+                IsActive = true,
+                Key = tokenKey
+            };
+        }
+
+        public async Task<Token> SaveToken(Token generatedToken)
+        {
+            return await _tokenRepository.SaveChangesAsync(generatedToken);
         }
 
         public TokenService(IRepository<Token> tokenRepository, IRepository<TokenPermission> tokenPermissionRepository, IDateTimeProvider dateTimeProvider)

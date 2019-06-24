@@ -62,7 +62,8 @@ INSERT INTO [dbo].[Permission]([Id],[Name],[Description],[Created],[Modified])
 			(2, 'Read', 'Ability to read', @dateNow, @dateNow),
 			(3, 'Update', 'Ability to update', @dateNow, @dateNow),
 			(4, 'SoftDelete', 'Ability to soft delete', @dateNow, @dateNow),
-			(5, 'Delete', 'Ability to delete', @dateNow, @dateNow)
+			(5, 'Delete', 'Ability to delete', @dateNow, @dateNow),
+			(6, 'TokenManager', 'Ability to manage API tokens', @dateNow, @dateNow)
 
 SET IDENTITY_INSERT  [dbo].[Permission] OFF
 

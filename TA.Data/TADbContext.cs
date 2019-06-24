@@ -29,10 +29,10 @@ namespace TA.Data
         public override Task<EntityEntry<TEntity>> AddAsync<TEntity>(TEntity entity, CancellationToken cancellationToken = new CancellationToken())
         {
             if (entity is ICreated createdEntity)
-                createdEntity.Created = _dateTimeProvider.DateTimeOffSet;
+                createdEntity.Created = _dateTimeProvider.Now;
 
             if (entity is IModified modifiedEntity)
-                modifiedEntity.Modified = _dateTimeProvider.DateTimeOffSet;
+                modifiedEntity.Modified = _dateTimeProvider.Now;
 
             return base.AddAsync(entity, cancellationToken);
         }
@@ -56,7 +56,7 @@ namespace TA.Data
                 createdEntity.Created = createdFoundEntity.Created;
 
             if (entity is IModified modifiedEntity)
-                modifiedEntity.Modified = _dateTimeProvider.DateTimeOffSet;
+                modifiedEntity.Modified = _dateTimeProvider.Now;
 
             return base.Update(entity);
         }

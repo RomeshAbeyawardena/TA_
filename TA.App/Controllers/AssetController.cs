@@ -23,7 +23,7 @@ namespace TA.App.Controllers
             _assetService = assetService;
         }
 
-        [HttpPost, RequiresApiKey]
+        [HttpPost, RequiresApiKey(Permission.Create, Permission.Update)]
         public async Task<ActionResult> SaveAsset([FromBody] AssetViewModel asset)
         {
             var mappedAsset = Map<AssetViewModel, Asset>(asset);
@@ -34,7 +34,7 @@ namespace TA.App.Controllers
                 await _assetService.SaveAsset(mappedAsset));
         }
 
-        [HttpGet]
+        [HttpGet, RequiresApiKey(Permission.Read)]
         public async Task<ActionResult> GetAssets(GetAssetsViewModel getAssetsViewModel)
         {
             var site = await GetSiteByName(getAssetsViewModel.SiteName);

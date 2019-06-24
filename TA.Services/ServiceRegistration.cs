@@ -15,6 +15,9 @@ namespace TA.Services
             services
                 .AddSingleton<IDateTimeProvider, DateTimeProvider>()
                 .AddSingleton<IMapperProvider, MapperProvider>()
+                .AddSingleton<ICryptographyProvider, CryptographyProvider>()
+                .AddScoped<ITokenKeyGenerator, TokenKeyGenerator>()
+                .AddScoped<IPermissionService, PermissionService>()
                 .AddScoped<ISiteService, SiteService>()
                 .AddScoped<IAssetService, AssetService>()
                 .AddScoped<ITokenService, TokenService>()

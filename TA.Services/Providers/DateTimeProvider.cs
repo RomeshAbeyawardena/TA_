@@ -7,7 +7,7 @@ namespace TA.Services.Providers
     public class DateTimeProvider : IDateTimeProvider
     {
         private readonly ISystemClock _systemClock;
-        public DateTimeOffset DateTimeOffSet => _systemClock.UtcNow;
+        public DateTimeOffset Now => _systemClock.UtcNow;
 
         public DateTimeProvider(ISystemClock systemClock)
         {

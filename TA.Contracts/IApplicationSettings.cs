@@ -4,5 +4,6 @@
     {
         string ConnectionString { get; set; }
         string ApiKey { get; set; }
+        long? DefaultTokenExpiryPeriodInDays { get; set; }
     }
 }

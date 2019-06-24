@@ -21,10 +21,11 @@ namespace TA.App.Attributes
 
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            var tokenService = context.HttpContext.RequestServices.GetRequiredService<ITokenService>();
+            var httpContext = context.HttpContext;
 
+            var tokenService = httpContext.RequestServices.GetRequiredService<ITokenService>();
 
-            context.HttpContext.Request.Headers.TryGetValue(General.ApiKey, out var apiKey);
+            httpContext.Request.Headers.TryGetValue(General.ApiKey, out var apiKey);
 
             var token = await tokenService.GetToken(apiKey);
 

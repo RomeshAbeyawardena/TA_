@@ -11,5 +11,6 @@ namespace TA
         }
         public string ConnectionString { get; set; }
         public string ApiKey { get; set; }
+        public long? DefaultTokenExpiryPeriodInDays { get; set; }
     }
 }

@@ -24,7 +24,7 @@ namespace TA.App.Controllers
             return Ok(savedSite);
         }
 
-        [HttpGet]
+        [HttpGet, RequiresApiKey(Permission.Read)]
         public async Task<ActionResult> GetSites(GetSitesViewModel getSitesViewModel)
         {
             return Ok(await _siteService.GetSites(getSitesViewModel.ShowInActive));
