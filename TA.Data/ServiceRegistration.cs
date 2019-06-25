@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using TA.Contracts;
+using TA.Data.Extensions;
 using TA.Domains.Extensions;
 using TA.Domains.Models;
 using Permission = TA.Domains.Models.Permission;
@@ -17,12 +18,12 @@ namespace TA.Data
                 .AddDbContext<TADbContext>(options => options
                     .UseSqlServer(applicationSettings.ConnectionString)
                     .EnableSensitiveDataLogging())
-                .AddScoped<IRepository<Site>, DefaultRepository<TADbContext, Site>>()
-                .AddScoped<IRepository<Asset>, DefaultRepository<TADbContext, Asset>>()
-                .AddScoped<IRepository<Token>, DefaultRepository<TADbContext, Token>>()
-                .AddScoped<IRepository<Permission>, DefaultRepository<TADbContext, Permission>>()
-                .AddScoped<IRepository<TokenPermission>, DefaultRepository<TADbContext, TokenPermission>>();
-
+                .RegisterRepositories<TADbContext>(
+                    typeof(Asset), 
+                    typeof(Permission), 
+                    typeof(Site), 
+                    typeof(Token), 
+                    typeof(TokenPermission));
         }
     }
 }
