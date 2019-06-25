@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -15,8 +16,17 @@ namespace TA.Data
     {
         private readonly TDbContext _dbContext;
 
-        public IQueryable<T> NoTrackingQuery => DbSet.AsNoTracking();
-        public IQueryable<T> Query => DbSet;
+        public IQueryable<T> Query(Expression<Func<T, bool>> queryExpression = null, bool noTrackingQuery = true)
+        {
+            var queryable = noTrackingQuery
+                ? DbSet.AsNoTracking()
+                : DbSet;
+
+            return queryExpression == null 
+                ? queryable
+                : queryable.Where(queryExpression);
+        }
+
         public DbSet<T> DbSet => _dbContext.Set<T>();
         
         public DbContext Context => _dbContext;

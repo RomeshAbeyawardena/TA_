@@ -16,7 +16,7 @@ namespace TA.Services
 
         public async Task<Permission> GetPermissionByName(string permissionName)
         {
-            return await _permissionRepository.NoTrackingQuery.FirstOrDefaultAsync(permission =>
+            return await _permissionRepository.Query().FirstOrDefaultAsync(permission =>
                 permission.Name == permissionName);
         }
     }

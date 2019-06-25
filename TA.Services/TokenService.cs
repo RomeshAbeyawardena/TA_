@@ -16,7 +16,7 @@ namespace TA.Services
 
         public async Task<bool> IsValid(Token token)
         {
-            return await _tokenRepository.NoTrackingQuery.AnyAsync(t => t.Key == token.Key 
+            return await _tokenRepository.Query().AnyAsync(t => t.Key == token.Key 
                                                                         && t.Expires > _dateTimeProvider.Now.DateTime);
         }
 
@@ -29,7 +29,7 @@ namespace TA.Services
 
         public async Task<Token> GetToken(string tokenKey)
         {
-            return await _tokenRepository.NoTrackingQuery
+            return await _tokenRepository.Query()
                 .Include(token => token.TokenPermissions)
                 .SingleOrDefaultAsync(token => token.Key == tokenKey);
         }
@@ -37,7 +37,7 @@ namespace TA.Services
 
         public async Task<bool> HasPermission(Token token, Permission permission)
         {
-            return await _tokenPermissionRepository.NoTrackingQuery.AnyAsync(tp => tp.TokenId == token.Id 
+            return await _tokenPermissionRepository.Query().AnyAsync(tp => tp.TokenId == token.Id 
                                                                                    && tp.PermissionId == (int)permission
                                                                                    && tp.Expires > _dateTimeProvider.Now);
         }

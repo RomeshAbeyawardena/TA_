@@ -31,13 +31,13 @@ namespace TA.Services
         public async Task<IEnumerable<Asset>> GetAssets(Site site, bool showInActive = false)
         {
             return Map(await _assetRepository.
-                NoTrackingQuery.Where(asset => asset.SiteId != site.Id || !showInActive || site.Active).ToArrayAsync());
+                Query().Where(asset => asset.SiteId != site.Id || !showInActive || site.Active).ToArrayAsync());
         }
 
         public async Task<Asset> GetAsset(Site site, string key)
         {
             return Map(await _assetRepository.
-                NoTrackingQuery.FirstOrDefaultAsync(asset =>
+                Query().FirstOrDefaultAsync(asset =>
                 asset.SiteId == site.Id && asset.Key == key));
         }
 
