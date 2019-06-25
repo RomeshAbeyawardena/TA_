@@ -18,8 +18,8 @@ namespace TA.App
 
         public async Task<int> Begin()
         {
-            var site = await _siteService.GetSite("my site");
-            var asset = await _assetService.GetAsset(site, "FeaturedProducts");
+            var site = await _siteService.GetSite("my site", false);
+            var asset = await _assetService.GetAsset(site, "FeaturedProducts", false);
             
             Console.WriteLine(JObject.FromObject(site));
             Console.WriteLine(JObject.FromObject(asset));

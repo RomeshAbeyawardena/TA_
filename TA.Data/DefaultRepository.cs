@@ -19,13 +19,13 @@ namespace TA.Data
 
         public IQueryable<T> Query(Expression<Func<T, bool>> queryExpression = null, bool trackingQuery = false)
         {
-            var queryable = trackingQuery
+            var query = trackingQuery
                 ? DbSet
                 : DbSet.AsNoTracking();
 
             return queryExpression == null 
-                ? queryable
-                : queryable.Where(queryExpression);
+                ? query
+                : query.Where(queryExpression);
         }
 
         public DbSet<T> DbSet => Context.Set<T>();
