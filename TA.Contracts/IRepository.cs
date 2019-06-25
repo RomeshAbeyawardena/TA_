@@ -8,7 +8,7 @@ namespace TA.Contracts
 {
     public interface IRepository<T> where T : class
     {
-        IQueryable<T> Query(Expression<Func<T, bool>> queryExpression = null, bool noTrackingQuery = true);
+        IQueryable<T> Query(Expression<Func<T, bool>> queryExpression = null, bool trackingQuery = false);
         DbSet<T> DbSet { get; }
         DbContext Context { get; }
         Task<T> SaveChangesAsync(T entry, bool commitChanges = true);

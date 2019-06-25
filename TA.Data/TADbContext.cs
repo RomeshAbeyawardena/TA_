@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,6 +16,16 @@ namespace TA.Data
     public class TADbContext : DbContext
     {
         private readonly IDateTimeProvider _dateTimeProvider;
+
+        private void SetMetaData<T>(T entity, DateTimeOffset? createdDate = null, DateTimeOffset? modifiedDate = null)
+        {
+            if (entity is ICreated createdEntity)
+                createdEntity.Created = createdDate ?? _dateTimeProvider.Now;
+
+            if (entity is IModified modifiedEntity)
+                modifiedEntity.Modified = modifiedDate ?? _dateTimeProvider.Now;
+        }
+
         public DbSet<Asset> Assets { get; set; }
         public DbSet<Site> Sites { get; set; }
         public DbSet<Token> Tokens { get; set; }
@@ -28,12 +39,7 @@ namespace TA.Data
 
         public override Task<EntityEntry<TEntity>> AddAsync<TEntity>(TEntity entity, CancellationToken cancellationToken = new CancellationToken())
         {
-            if (entity is ICreated createdEntity)
-                createdEntity.Created = _dateTimeProvider.Now;
-
-            if (entity is IModified modifiedEntity)
-                modifiedEntity.Modified = _dateTimeProvider.Now;
-
+            SetMetaData(entity);
             return base.AddAsync(entity, cancellationToken);
         }
 
@@ -46,17 +52,16 @@ namespace TA.Data
         {
             var keyProperties = entity.GetKeyProperties().ToArray();
             
+            //Uses overload if more than key property is defined
             var foundEntity = keyProperties.Length > 1 
                 ? Find<TEntity>(keyProperties) 
                 : Find<TEntity>(keyProperties.Single());
 
+            //Detaches the entity so the provided entity can be used to update instead
             Entry(foundEntity).State = EntityState.Detached;
 
-            if (entity is ICreated createdEntity && foundEntity is ICreated createdFoundEntity)
-                createdEntity.Created = createdFoundEntity.Created;
-
-            if (entity is IModified modifiedEntity)
-                modifiedEntity.Modified = _dateTimeProvider.Now;
+            if(foundEntity is ICreated createdFoundEntity) 
+                SetMetaData(entity, createdFoundEntity.Created);
 
             return base.Update(entity);
         }
@@ -65,7 +70,8 @@ namespace TA.Data
         {
             foreach (var mutableEntityType in modelBuilder.Model.GetEntityTypes())
             {
-                mutableEntityType.Relational().TableName = mutableEntityType.Relational().TableName.Singularize();
+                mutableEntityType.Relational().TableName = mutableEntityType.Relational()
+                    .TableName.Singularize();
             }
 
             base.OnModelCreating(modelBuilder);
