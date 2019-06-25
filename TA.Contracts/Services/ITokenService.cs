@@ -19,8 +19,8 @@ namespace TA.Contracts
         Token ClearTokenPermissions(Token token);
         Task<Token> GetToken(string tokenKey);
         Task<bool> IsValid(Token token);
-        Task<bool> HasPermission(Token token, Permission permission);
-        Task<bool> HasPermissions(Token token, IEnumerable<Permission> permission);
+        bool HasPermission(Token token, Permission permission);
+        bool HasPermissions(Token token, IEnumerable<Permission> permission);
         Token GenerateToken(string tokenKey, DateTimeOffset expiryDate);
         Task<Token> SaveToken(Token generatedToken);
     }

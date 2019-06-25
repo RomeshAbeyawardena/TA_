@@ -30,7 +30,7 @@ namespace TA.App.Attributes
             var token = await tokenService.GetToken(apiKey);
 
             if (token != null && await tokenService.IsValid(token)
-                && await tokenService.HasPermissions(token, _permissions))
+                && tokenService.HasPermissions(token, _permissions))
             {
                 await next();
                 return;

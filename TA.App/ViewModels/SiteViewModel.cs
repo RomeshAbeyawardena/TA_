@@ -9,9 +9,6 @@ namespace TA.App.ViewModels
         public string Name { get; set; }
         [Required]
         public string Url { get; set; }
-        [Required]
-        public bool IsActive { get; set; }
-        
         public object Attributes { get; set; }
         [Required]
         public bool Active { get; set; }
