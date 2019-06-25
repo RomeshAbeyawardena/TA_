@@ -8,6 +8,7 @@ namespace TA.Contracts
 {
     public interface IRepository<T> where T : class
     {
+        T Attach(T entity);
         IQueryable<T> Query(Expression<Func<T, bool>> queryExpression = null, bool trackingQuery = false);
         DbSet<T> DbSet { get; }
         DbContext Context { get; }

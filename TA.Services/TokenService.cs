@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TA.Contracts;
+using TA.Contracts.Providers;
 using TA.Domains.Models;
 using Permission = TA.Contracts.Permission;
 

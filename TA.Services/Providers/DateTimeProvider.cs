@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Extensions.Internal;
 using TA.Contracts;
+using TA.Contracts.Providers;
 
 namespace TA.Services.Providers
 {

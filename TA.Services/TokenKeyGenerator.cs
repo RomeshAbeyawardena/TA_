@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using TA.Contracts;
+using TA.Contracts.Providers;
 using TA.Domains.Enumerations;
 
 namespace TA.Services

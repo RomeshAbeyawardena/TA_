@@ -12,6 +12,11 @@ namespace TA.Data
         where TDbContext : DbContext
         where T : class
     {
+        public T Attach(T entity)
+        {
+            return DbSet.Attach(entity).Entity;
+        }
+
         public IQueryable<T> Query(Expression<Func<T, bool>> queryExpression = null, bool trackingQuery = false)
         {
             var queryable = trackingQuery

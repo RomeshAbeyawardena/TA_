@@ -10,7 +10,9 @@ namespace TA.App.ViewModels
         [Required]
         public string Url { get; set; }
         [Required]
-        public string JsonAttributes { get; set; }
+        public bool IsActive { get; set; }
+        [Required]
+        public object JsonAttributes { get; set; }
         [Required]
         public bool Active { get; set; }
 

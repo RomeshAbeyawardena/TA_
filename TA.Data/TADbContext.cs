@@ -8,6 +8,7 @@ using TA.Domains.Models;
 using Humanizer;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using TA.Contracts;
+using TA.Contracts.Providers;
 using TA.Domains.Contracts;
 using TA.Domains.Extensions;
 

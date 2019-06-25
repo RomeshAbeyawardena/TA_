@@ -14,10 +14,13 @@ namespace TA.Data
         {
             var applicationSettings = services
                 .GetRequiredService<IApplicationSettings>();
+            
             services
                 .AddDbContext<TADbContext>(options => options
                     .UseSqlServer(applicationSettings.ConnectionString)
+#if DEBUG
                     .EnableSensitiveDataLogging())
+#endif
                 .RegisterRepositories<TADbContext>(
                     typeof(Asset), 
                     typeof(Permission), 

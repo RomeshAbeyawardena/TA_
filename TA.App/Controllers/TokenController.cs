@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using TA.App.Attributes;
 using TA.App.ViewModels;
 using TA.Contracts;
+using TA.Contracts.Providers;
 using TA.Domains.Enumerations;
 using TA.Domains.Extensions;
 using TA.Domains.Models;

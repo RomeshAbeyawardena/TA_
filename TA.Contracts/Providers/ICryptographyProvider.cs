@@ -2,7 +2,7 @@
 using System.Text;
 using TA.Domains.Enumerations;
 
-namespace TA.Contracts
+namespace TA.Contracts.Providers
 {
     public interface ICryptographyProvider
     {

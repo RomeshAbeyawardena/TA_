@@ -34,10 +34,10 @@ namespace TA.Services
                 Query().Where(asset => asset.SiteId != site.Id || !showInActive || site.Active).ToArrayAsync());
         }
 
-        public async Task<Asset> GetAsset(Site site, string key)
+        public async Task<Asset> GetAsset(Site site, string key, bool trackEntity)
         {
             return Map(await _assetRepository.
-                Query().FirstOrDefaultAsync(asset =>
+                Query(trackingQuery: trackEntity).FirstOrDefaultAsync(asset =>
                 asset.SiteId == site.Id && asset.Key == key));
         }
 

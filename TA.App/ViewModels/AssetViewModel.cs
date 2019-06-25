@@ -14,8 +14,7 @@ namespace TA.App.ViewModels
         [Required]
         public string RelativeUrl { get; set; }
 
-        [Required]
-        public string JsonAttributes { get; set; }
+        public object JsonAttributes { get; set; }
 
         [Required]
         public bool Active { get; set; }

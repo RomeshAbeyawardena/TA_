@@ -35,10 +35,11 @@ namespace TA.Services
         }
 
 
-        public async Task<Site> GetSite(string name)
+        public async Task<Site> GetSite(string name, bool trackEntity)
         {
-            return Map(await _siteRepository.
-                Query().FirstOrDefaultAsync(site => site.Name == name));
+            return Map(await _siteRepository
+                .Query(trackingQuery: trackEntity)
+                .FirstOrDefaultAsync(site => site.Name == name));
         }
 
         public async Task<Site> GetSite(int id)

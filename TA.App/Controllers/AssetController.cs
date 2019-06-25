@@ -14,7 +14,7 @@ namespace TA.App.Controllers
 
         private async Task<Site> GetSiteByName(string name)
         {
-            return await _siteService.GetSite(name);
+            return await _siteService.GetSite(name, true);
         }
 
         public AssetController(ISiteService siteService, IAssetService assetService)

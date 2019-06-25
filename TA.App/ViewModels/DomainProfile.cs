@@ -10,11 +10,11 @@ namespace TA.App.ViewModels
         {
             CreateMap<AssetViewModel, Asset>()
                 .ForMember(member => member.Attributes, 
-                    options => options.MapFrom(member =>JObject.Parse(member.JsonAttributes)));
+                    options => options.MapFrom(member =>JObject.FromObject(member.JsonAttributes)));
 
             CreateMap<SiteViewModel, Site>()
                 .ForMember(member => member.Attributes, 
-                    options => options.MapFrom(member =>JObject.Parse(member.JsonAttributes)));
+                    options => options.MapFrom(member =>JObject.FromObject(member.JsonAttributes)));
         }
     }
 }

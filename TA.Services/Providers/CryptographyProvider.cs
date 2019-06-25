@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using TA.Contracts;
+using TA.Contracts.Providers;
 using WebToolkit.Common;
 using HashAlgorithm = TA.Domains.Enumerations.HashAlgorithm;
 
