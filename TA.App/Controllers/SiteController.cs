@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TA.App.Attributes;
 using TA.App.ViewModels;
+using TA.Contracts;
 using TA.Domains.Dtos;
 
 namespace TA.App.Controllers
@@ -15,12 +16,18 @@ namespace TA.App.Controllers
             _siteService = siteService;
         }
 
-        [HttpPost, RequiresApiKey]
+        [HttpPost, RequiresApiKey(Permission.Create, Permission.Update)]
         public async Task<ActionResult> SaveSite([FromBody] SiteViewModel site)
         {
             var mappedSite = Map<SiteViewModel, Site>(site);
             var savedSite = await _siteService.SaveSite(mappedSite);
             return Ok(savedSite);
+        }
+
+        [HttpGet, RequiresApiKey(Permission.Read)]
+        public async Task<ActionResult> GetSites(GetSitesViewModel getSitesViewModel)
+        {
+            return Ok(await _siteService.GetSites(getSitesViewModel.ShowInActive));
         }
     }
 }

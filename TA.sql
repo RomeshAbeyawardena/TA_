@@ -1,4 +1,13 @@
-﻿IF OBJECT_ID('[dbo].[User]') IS NOT NULL
+﻿IF OBJECT_ID('[dbo].[TokenPermission]') IS NOT NULL
+DROP TABLE [dbo].[TokenPermission]
+
+IF OBJECT_ID('[dbo].[Permission]') IS NOT NULL
+DROP TABLE [dbo].[Permission]
+
+IF OBJECT_ID('[dbo].[Token]') IS NOT NULL
+DROP TABLE [dbo].[Token]
+
+IF OBJECT_ID('[dbo].[User]') IS NOT NULL
 DROP TABLE [dbo].[User]
 
 IF OBJECT_ID('[dbo].[SiteAccess]') IS NOT NULL
@@ -21,6 +30,62 @@ CREATE TABLE [dbo].[User](
 ,[Created] DATETIMEOFFSET NOT NULL
 ,[Modified] DATETIMEOFFSET NOT NULL
 )
+
+CREATE TABLE [dbo].[Token](
+	 [Id] INT NOT NULL IDENTITY(1,1)
+		CONSTRAINT PK_Token PRIMARY KEY
+	,[Key] VARCHAR(200) NOT NULL
+		CONSTRAINT IQ_Token UNIQUE
+	,[IsActive] BIT NOT NULL
+	,[Created] DATETIMEOFFSET NOT NULL
+	,[Expires] DATETIMEOFFSET NOT NULL
+)
+
+DECLARE @dateNow DATETIMEOFFSET = GETDATE()
+DECLARE @defaultExpiry DATETIMEOFFSET = DATEADD(YEAR, 4, @dateNow)
+INSERT INTO [dbo].[Token] ([Key],[IsActive],[Created],[Expires])
+	VALUES ('60807141CC6E54CCCC8A72BEA111A95391C86DC5283643FFD4ABA75373987538685F2E4D007007BF915B4524B1F2EC56BA57DF56F3B1C65B971F902A7116A831',1, @dateNow, @defaultExpiry)
+
+CREATE TABLE [dbo].[Permission](
+	[Id] INT NOT NULL IDENTITY(1,1)
+		CONSTRAINT PK_Permission PRIMARY KEY
+	,[Name] VARCHAR(200) NOT NULL
+	,[Description] VARCHAR(2000) NOT NULL
+	,[Created] DATETIMEOFFSET
+	,[Modified] DATETIMEOFFSET
+)
+
+SET IDENTITY_INSERT  [dbo].[Permission] ON
+
+INSERT INTO [dbo].[Permission]([Id],[Name],[Description],[Created],[Modified])
+	VALUES  (1, 'Create', 'Ability to create', @dateNow, @dateNow),
+			(2, 'Read', 'Ability to read', @dateNow, @dateNow),
+			(3, 'Update', 'Ability to update', @dateNow, @dateNow),
+			(4, 'SoftDelete', 'Ability to soft delete', @dateNow, @dateNow),
+			(5, 'Delete', 'Ability to delete', @dateNow, @dateNow),
+			(6, 'TokenManager', 'Ability to manage API tokens', @dateNow, @dateNow)
+
+SET IDENTITY_INSERT  [dbo].[Permission] OFF
+
+CREATE TABLE [dbo].[TokenPermission](
+	[Id] INT NOT NULL IDENTITY(1,1)
+		CONSTRAINT PK_TokenPermission PRIMARY KEY
+	,[PermissionId] INT NOT NULL
+	,[TokenId] INT NOT NULL
+		CONSTRAINT FK_TokenPermission_Token
+			REFERENCES [dbo].[Token]([Id])
+	,[Created] DATETIMEOFFSET NOT NULL
+	,[Expires] DATETIMEOFFSET NOT NULL
+	,CONSTRAINT IQ_TokenPermission UNIQUE([PermissionId], [TokenId])
+)
+
+INSERT INTO [dbo].[TokenPermission] ([PermissionId], [TokenId],[Created],[Expires])
+	VALUES (1, 1, @dateNow, @defaultExpiry),
+		(2, 1, @dateNow, @defaultExpiry),
+		(3, 1, @dateNow, @defaultExpiry),
+		(4, 1, @dateNow, @defaultExpiry),
+		(5, 1, @dateNow, @defaultExpiry),
+		(6, 1, @dateNow, @defaultExpiry)
 
 CREATE TABLE [dbo].[Site](
 [Id] INT NOT NULL IDENTITY(1,1)

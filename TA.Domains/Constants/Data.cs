@@ -2,6 +2,6 @@
 {
     public static class Data
     {
-        
+        public const long DefaultTokenExpiryPeriodInDays = 365;
     }
 }

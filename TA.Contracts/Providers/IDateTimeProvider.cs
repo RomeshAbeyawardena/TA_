@@ -1,9 +1,9 @@
 ﻿using System;
 
-namespace TA.Contracts
+namespace TA.Contracts.Providers
 {
     public interface IDateTimeProvider
     {
-        DateTimeOffset DateTimeOffSet { get; }
+        DateTimeOffset Now { get; }
     }
 }

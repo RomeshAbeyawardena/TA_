@@ -1,4 +1,4 @@
 {
   "ConnectionString": "Server=localhost;Database=TA;Integrated Security=SSPI;MultipleActiveResultSets=True",
-  "ApiKey": "8CD9440BE1148A28D74348A615C9D65F9E93FA8FF52A57ED511A76D43C3D6240"
+  "DefaultTokenExpiryPeriodInDays": "365"
 }

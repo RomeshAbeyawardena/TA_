@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Linq;
-using System.Reflection;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TA.Contracts;
 using TA.Domains.Extensions;
-using TA.Domains.Models;
 
 namespace TA.Data
 {
@@ -13,13 +12,25 @@ namespace TA.Data
         where TDbContext : DbContext
         where T : class
     {
-        private readonly TDbContext _dbContext;
+        public T Attach(T entity)
+        {
+            return DbSet.Attach(entity).Entity;
+        }
 
-        public IQueryable<T> NoTrackingQuery => DbSet.AsNoTracking();
-        public IQueryable<T> Query => DbSet;
-        public DbSet<T> DbSet => _dbContext.Set<T>();
+        public IQueryable<T> Query(Expression<Func<T, bool>> queryExpression = null, bool trackingQuery = false)
+        {
+            var queryable = trackingQuery
+                ? DbSet
+                : DbSet.AsNoTracking();
+
+            return queryExpression == null 
+                ? queryable
+                : queryable.Where(queryExpression);
+        }
+
+        public DbSet<T> DbSet => Context.Set<T>();
         
-        public DbContext Context => _dbContext;
+        public DbContext Context { get; }
         public async Task<T> SaveChangesAsync(T entry, bool commitChanges = true)
         {
             var entries = entry.GetKeyProperties();
@@ -29,14 +40,14 @@ namespace TA.Data
                 DbSet.Update(entry);
             
             if (commitChanges)
-                await _dbContext.SaveChangesAsync();
+                await Context.SaveChangesAsync();
 
             return entry;
         }
 
         public DefaultRepository(TDbContext dbContext)
         {
-            _dbContext = dbContext;
+            Context = dbContext;
         }
     }
 }
