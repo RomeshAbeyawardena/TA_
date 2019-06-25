@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using TA.Contracts;
+using TA.Contracts.Services;
 
 namespace TA.App
 {

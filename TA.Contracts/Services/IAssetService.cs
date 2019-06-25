@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using TA.Domains.Dtos;
 
-namespace TA.Contracts
+namespace TA.Contracts.Services
 {
     public interface IAssetService
     {
