@@ -38,6 +38,20 @@ namespace TA.Data
             _dateTimeProvider = dateTimeProvider;
         }
 
+        public override async Task<TEntity> FindAsync<TEntity>(object[] keyValues, CancellationToken cancellationToken)
+        {
+            var value = await base.FindAsync<TEntity>(keyValues, cancellationToken);
+
+            Entry(value).State = EntityState.Detached;
+
+            return value;
+        }
+
+        public override async Task<TEntity> FindAsync<TEntity>(params object[] keyValues)
+        {
+            return await FindAsync<TEntity>(keyValues, CancellationToken.None);
+        }
+
         public override Task<EntityEntry<TEntity>> AddAsync<TEntity>(TEntity entity, CancellationToken cancellationToken = new CancellationToken())
         {
             SetMetaData(entity);
