@@ -20,10 +20,11 @@ namespace TA.App.Attributes
     {
         private readonly Permission[] _permissions;
 
-        private readonly Func<IServiceProvider, ITokenService> _getTokenService = services => services.GetRequiredService<ITokenService>();
+        private readonly Func<IServiceProvider, ITokenService> _getTokenService;
 
         public RequiresApiKeyAttribute(params Permission[] permissions)
         {
+            _getTokenService = services => services.GetRequiredService<ITokenService>();
             _permissions = permissions;
         }
 
