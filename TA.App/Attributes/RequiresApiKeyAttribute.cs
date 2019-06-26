@@ -1,42 +1,76 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
 using TA.Contracts;
+using TA.Contracts.ActionFilters;
 using TA.Domains.Constants;
+using TA.Domains.Models;
+using Permission = TA.Contracts.Permission;
 
 namespace TA.App.Attributes
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-    public class RequiresApiKeyAttribute : Attribute, IAsyncActionFilter
+    public class RequiresApiKeyAttribute : Attribute, ITokenPermissionAsyncActionFilter<Token, Permission>
     {
         private readonly Permission[] _permissions;
+
+        private readonly Func<IServiceProvider, ITokenService> _getTokenService = services => services.GetRequiredService<ITokenService>();
 
         public RequiresApiKeyAttribute(params Permission[] permissions)
         {
             _permissions = permissions;
         }
 
+        public override bool Match(object obj)
+        {
+            if (obj is RequiresApiKeyAttribute requiresApiKeyAttribute)
+                return _permissions.All(a => requiresApiKeyAttribute._permissions.Contains(a));
+
+            return false;
+        }
+
+        public override bool IsDefaultAttribute()
+        {
+            return true;
+        }
+
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            var httpContext = context.HttpContext;
-
-            var tokenService = httpContext.RequestServices.GetRequiredService<ITokenService>();
-
-            httpContext.Request.Headers.TryGetValue(General.ApiKey, out var apiKey);
-
-            var token = await tokenService.GetToken(apiKey);
-
-            if (token != null && await tokenService.IsValid(token)
-                && await tokenService.HasPermissions(token, _permissions))
+            var token = await GetToken(context.HttpContext);
+            if (token != null && await IsValid(context.HttpContext, token)
+                && HasPermissions(context.HttpContext, token, _permissions))
             {
                 await next();
                 return;
             }
 
             context.Result = new UnauthorizedResult();
+        }
+
+        public async Task<Token> GetToken(HttpContext httpContext)
+        {
+            var tokenService = _getTokenService(httpContext.RequestServices);
+            httpContext.Request.Headers.TryGetValue(General.ApiKey, out var apiKey);
+
+            return await tokenService.GetToken(apiKey);
+        }
+
+        public async Task<bool> IsValid(HttpContext httpContext, Token token)
+        {
+            var tokenService = _getTokenService(httpContext.RequestServices);
+            return await tokenService.IsValid(token);
+        }
+
+        public bool HasPermissions(HttpContext httpContext, Token token, IEnumerable<Permission> permissions)
+        {
+            var tokenService = _getTokenService(httpContext.RequestServices);
+            return tokenService.HasPermissions(token, permissions);
         }
     }
 }

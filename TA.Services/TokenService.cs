@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TA.Contracts;
@@ -12,12 +13,11 @@ namespace TA.Services
     public class TokenService : ITokenService
     {
         private readonly IRepository<Token> _tokenRepository;
-        private readonly IRepository<TokenPermission> _tokenPermissionRepository;
         private readonly IDateTimeProvider _dateTimeProvider;
 
         public async Task<bool> IsValid(Token token)
         {
-            return await _tokenRepository.Query().AnyAsync(t => t.Key == token.Key 
+            return await _tokenRepository.Query().AnyAsync(t => t.Key == token.Key
                                                                         && t.Expires > _dateTimeProvider.Now.DateTime);
         }
 
@@ -36,22 +36,17 @@ namespace TA.Services
         }
 
 
-        public async Task<bool> HasPermission(Token token, Permission permission)
+        public bool HasPermission(Token token, Permission permission)
         {
-            return await _tokenPermissionRepository.Query().AnyAsync(tp => tp.TokenId == token.Id 
-                                                                                   && tp.PermissionId == (int)permission
-                                                                                   && tp.Expires > _dateTimeProvider.Now);
+            return token.TokenPermissions
+                .Any(tp => tp.TokenId == token.Id
+                           && tp.PermissionId == (int) permission
+                           && tp.Expires > _dateTimeProvider.Now);
         }
 
-        public async Task<bool> HasPermissions(Token token, IEnumerable<Permission> permissions)
+        public bool HasPermissions(Token token, IEnumerable<Permission> permissions)
         {
-            foreach (var permission in permissions)
-            {
-                if (!await HasPermission(token, permission))
-                    return false;
-            }
-
-            return true;
+            return permissions.All(permission => HasPermission(token, permission));
         }
 
         public Token GenerateToken(string tokenKey, DateTimeOffset expiryDate)
@@ -69,10 +64,9 @@ namespace TA.Services
             return await _tokenRepository.SaveChangesAsync(generatedToken);
         }
 
-        public TokenService(IRepository<Token> tokenRepository, IRepository<TokenPermission> tokenPermissionRepository, IDateTimeProvider dateTimeProvider)
+        public TokenService(IRepository<Token> tokenRepository, IDateTimeProvider dateTimeProvider)
         {
             _tokenRepository = tokenRepository;
-            _tokenPermissionRepository = tokenPermissionRepository;
             _dateTimeProvider = dateTimeProvider;
         }
     }

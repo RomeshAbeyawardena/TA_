@@ -3,6 +3,7 @@ using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
 using TA.Contracts;
 using TA.Contracts.Providers;
+using TA.Contracts.Services;
 using TA.Services.Providers;
 using WebToolkit.Common.Providers;
 using WebToolkit.Contracts.Providers;
