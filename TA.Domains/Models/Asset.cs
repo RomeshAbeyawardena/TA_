@@ -14,7 +14,7 @@ namespace TA.Domains.Models
         public string Key { get; set; }
         public string RelativeUrl { get; set; }
         public string JsonAttributes { get; set; }
-        public bool Active { get; set; }
+        public bool IsActive { get; set; }
         public DateTimeOffset Created { get; set; }
         public DateTimeOffset Modified { get; set; }
 

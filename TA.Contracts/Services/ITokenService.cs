@@ -11,7 +11,8 @@ namespace TA.Contracts
         Update = 3, 
         SoftDelete = 4, 
         Delete = 5, 
-        TokenManager = 6
+        TokenManager = 6,
+        ApiAccess = 7
     }
 
     public interface ITokenService

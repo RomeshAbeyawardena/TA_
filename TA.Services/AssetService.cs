@@ -32,7 +32,9 @@ namespace TA.Services
         public async Task<IEnumerable<Asset>> GetAssets(Site site, bool showInActive = false)
         {
             return Map(await _assetRepository.
-                Query().Where(asset => asset.SiteId != site.Id || !showInActive || site.Active).ToArrayAsync());
+                Query()
+                .Include(asset => asset.Site)
+                .Where(asset => asset.SiteId == site.Id && site.IsActive).ToArrayAsync());
         }
 
         public async Task<Asset> GetAsset(Site site, string key, bool trackEntity)

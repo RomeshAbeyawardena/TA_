@@ -1,10 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
+using TA.Contracts;
+using TA.Contracts.Providers;
+using TA.Domains.Constants;
 using TA.Domains.Exceptions;
 using WebToolkit.Contracts.Providers;
+using Permission = TA.Domains.Models.Permission;
 
 namespace TA.App.Controllers
 {
@@ -20,6 +25,19 @@ namespace TA.App.Controllers
 
         private IMapperProvider MapperProvider => GetRequiredService<IMapperProvider>();
 
+        private async Task<T> LoadAsync<T>(CacheType cacheType, string key, Func<Task<T>> loader)
+        {
+            var cacheProvider = GetRequiredService<ICacheProvider>();
+            var result = await cacheProvider.Get<T>(cacheType, key);
+
+            if (result != null)
+                return result;
+
+            result = await loader();
+            await cacheProvider.Set(cacheType, key, result);
+
+            return result;
+        }
 
         public override void OnActionExecuting(ActionExecutingContext context)
         {
@@ -37,6 +55,18 @@ namespace TA.App.Controllers
             catch (InvalidModelStateException invalidModelStateException)
             {
                 context.Result = BadRequest(invalidModelStateException.ModelStateDictionary);
+            }
+        }
+
+        public IEnumerable<Permission> Permissions
+        {
+            get
+            {
+                var permissionService = GetRequiredService<IPermissionService>();
+                var permissions = LoadAsync(CacheType.DistributedCache, Caching.PermissionsCacheKey,
+                    async () => await permissionService.GetPermissions()).Result;
+
+                return permissions;
             }
         }
 

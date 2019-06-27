@@ -56,7 +56,7 @@ namespace TA.Services
 
         public async Task<IEnumerable<Site>> GetSites(bool showInActive = false)
         {
-            return Map(await _siteRepository.Query().Where(a => !showInActive || a.Active).ToArrayAsync());
+            return Map(await _siteRepository.Query().Where(a => !showInActive || a.IsActive).ToArrayAsync());
         }
     }
 }

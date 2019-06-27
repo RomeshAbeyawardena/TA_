@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
 using TA.Contracts;
 using TA.Contracts.ActionFilters;
+using TA.Contracts.Providers;
 using TA.Domains.Constants;
 using TA.Domains.Models;
 using Permission = TA.Contracts.Permission;
@@ -21,7 +22,7 @@ namespace TA.App.Attributes
         private readonly Permission[] _permissions;
 
         private readonly Func<IServiceProvider, ITokenService> _getTokenService;
-
+        private readonly Func<IServiceProvider, ICacheProvider> _getCacheProvider;
         public RequiresApiKeyAttribute(params Permission[] permissions)
         {
             _getTokenService = services => services.GetRequiredService<ITokenService>();
@@ -43,15 +44,21 @@ namespace TA.App.Attributes
 
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            var token = await GetToken(context.HttpContext);
-            if (token != null && await IsValid(context.HttpContext, token)
-                && HasPermissions(context.HttpContext, token, _permissions))
+            try
             {
-                await next();
-                return;
-            }
+                var token = await GetToken(context.HttpContext);
+                if (token != null && await IsValid(context.HttpContext, token)
+                                  && HasPermissions(context.HttpContext, token, _permissions))
+                {
+                    await next();
+                }
 
-            context.Result = new UnauthorizedResult();
+                throw new UnauthorizedAccessException($"Access token requires the following permissions: {string.Join(",", _permissions)}");
+            }
+            catch (UnauthorizedAccessException unauthorisedAccessException)
+            {
+                context.Result = new UnauthorizedObjectResult(unauthorisedAccessException);
+            }
         }
 
         public async Task<Token> GetToken(HttpContext httpContext)

@@ -13,7 +13,7 @@ namespace TA.Domains.Models
         public string Name { get; set; }
         public string Url { get; set; }
         public string JsonAttributes { get; set; }
-        public bool Active { get; set; }
+        public bool IsActive { get; set; }
         public DateTimeOffset Created { get; set; }
         public DateTimeOffset Modified { get; set; }
         
