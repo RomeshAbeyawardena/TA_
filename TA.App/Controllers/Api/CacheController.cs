@@ -9,10 +9,9 @@ namespace TA.App.Controllers.Api
         private readonly ICacheProvider _cacheProvider;
 
         [HttpGet]
-        public async Task<ActionResult> Clear()
+        public ActionResult Clear()
         {
-            await _cacheProvider.Clear();
-            return Ok();
+            return Ok(_cacheProvider.Clear());
         }
 
         public CacheController(ICacheProvider cacheProvider)

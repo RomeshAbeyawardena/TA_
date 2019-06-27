@@ -7,6 +7,7 @@ namespace TA.Contracts.Providers
     {
         Task<T> Get<T>(CacheType cacheType, string key);
         Task Set<T>(CacheType cacheType, string key, T value);
-        Task Clear();
+        
+        Task<int> Clear();
     }
 }
