@@ -22,8 +22,8 @@ namespace TA.Services.Providers
 
         public async Task<T> Get<T>(CacheType cacheType, string key)
         {
-            
-            return await _asyncLocks.GetOrCreate<T>("Get", async () =>
+
+            return await _asyncLocks.GetOrCreate("Get", async () =>
             {
                 if (!_keyEntries.Contains(key))
                     return default;
@@ -44,12 +44,14 @@ namespace TA.Services.Providers
 
         public async Task<int> Clear()
         {
-            return await _asyncLocks.GetOrCreate<int>("Clear", async () => {
+            return await _asyncLocks.GetOrCreate("Clear", async () =>
+            {
                 var keyCount = _keyEntries.Count;
-                await _keyEntries.ForEach(async(key) => await _distributedCache.RemoveAsync(key));
+                await _keyEntries.ForEach(async (key) => await _distributedCache.RemoveAsync(key));
                 _keyEntries.Clear();
 
-                return keyCount; }).Invoke();
+                return keyCount;
+            }).Invoke();
         }
 
 
