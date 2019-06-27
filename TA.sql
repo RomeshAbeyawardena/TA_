@@ -63,7 +63,8 @@ INSERT INTO [dbo].[Permission]([Id],[Name],[Description],[Created],[Modified])
 			(3, 'Update', 'Ability to update', @dateNow, @dateNow),
 			(4, 'SoftDelete', 'Ability to soft delete', @dateNow, @dateNow),
 			(5, 'Delete', 'Ability to delete', @dateNow, @dateNow),
-			(6, 'TokenManager', 'Ability to manage API tokens', @dateNow, @dateNow)
+			(6, 'TokenManager', 'Ability to manage API tokens', @dateNow, @dateNow),
+			(7, 'ApiAccess', 'Ability to make API calls', @dateNow, @dateNow)
 
 SET IDENTITY_INSERT  [dbo].[Permission] OFF
 
@@ -85,7 +86,8 @@ INSERT INTO [dbo].[TokenPermission] ([PermissionId], [TokenId],[Created],[Expire
 		(3, 1, @dateNow, @defaultExpiry),
 		(4, 1, @dateNow, @defaultExpiry),
 		(5, 1, @dateNow, @defaultExpiry),
-		(6, 1, @dateNow, @defaultExpiry)
+		(6, 1, @dateNow, @defaultExpiry),
+		(7, 1, @dateNow, @defaultExpiry)
 
 CREATE TABLE [dbo].[Site](
 [Id] INT NOT NULL IDENTITY(1,1)
@@ -95,7 +97,7 @@ CREATE TABLE [dbo].[Site](
 ,[JsonAttributes] VARCHAR(2048) NOT NULL
  CONSTRAINT CHK_Site_JsonAttributes
  CHECK (ISJSON([JsonAttributes]) IS NOT NULL)
-,[Active] BIT NOT NULL
+,[IsActive] BIT NOT NULL
 ,[Created] DATETIMEOFFSET NOT NULL
 ,[Modified] DATETIMEOFFSET NOT NULL
 )
@@ -112,7 +114,7 @@ CREATE TABLE [dbo].[Asset](
 ,[JsonAttributes] VARCHAR(2048) NOT NULL
  CONSTRAINT CHK_Asset_JsonAttributes
  CHECK (ISJSON([JsonAttributes]) IS NOT NULL)
-,[Active] BIT NOT NULL
+,[IsActive] BIT NOT NULL
 ,[Created] DATETIMEOFFSET NOT NULL
 ,[Modified] DATETIMEOFFSET NOT NULL
 )

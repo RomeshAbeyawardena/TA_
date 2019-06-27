@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TA.Contracts;
 using Permission = TA.Domains.Models.Permission;
@@ -14,10 +16,15 @@ namespace TA.Services
             _permissionRepository = permissionRepository;
         }
 
-        public async Task<Permission> GetPermissionByName(string permissionName)
+        public Permission GetPermissionByName(string permissionName, IEnumerable<Permission> permissions)
         {
-            return await _permissionRepository.Query().FirstOrDefaultAsync(permission =>
+            return permissions.FirstOrDefault(permission =>
                 permission.Name == permissionName);
+        }
+
+        public async Task<IEnumerable<Permission>> GetPermissions()
+        {
+            return await _permissionRepository.Query().ToArrayAsync();
         }
     }
 }

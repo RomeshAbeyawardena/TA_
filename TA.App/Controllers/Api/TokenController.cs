@@ -8,14 +8,13 @@ using TA.App.ViewModels;
 using TA.Contracts;
 using TA.Contracts.Providers;
 using TA.Domains.Enumerations;
-using TA.Domains.Extensions;
 using TA.Domains.Models;
 using Permission = TA.Contracts.Permission;
 
-namespace TA.App.Controllers
+namespace TA.App.Controllers.Api
 {
     [RequiresApiKey(Permission.TokenManager)]
-    public class TokenController : ControllerBase
+    public class TokenController : ApiControllerBase
     {
         private readonly IApplicationSettings _applicationSettings;
         private readonly IDateTimeProvider _dateTimeProvider;
@@ -28,6 +27,7 @@ namespace TA.App.Controllers
             return  _dateTimeProvider.Now.AddDays(_applicationSettings.DefaultTokenExpiryPeriodInDays
                                                   ?? Domains.Constants.Data.DefaultTokenExpiryPeriodInDays);
         }
+
         private async Task<IEnumerable<TokenPermission>> AssignTokenPermissions(IEnumerable<string> permissions)
         {
             var dateNow = _dateTimeProvider.Now;
@@ -37,7 +37,7 @@ namespace TA.App.Controllers
 
             foreach (var permissionName in permissions)
             {
-                var permission = await _permissionService.GetPermissionByName(permissionName);
+                var permission = _permissionService.GetPermissionByName(permissionName, await Permissions);
 
                 tokenPermissionList.Add(new TokenPermission
                 {
@@ -60,6 +60,7 @@ namespace TA.App.Controllers
             _permissionService = permissionService;
         }
 
+        [HttpPost]
         public async Task<ActionResult> AssignTokenPermissions([FromBody] GenerateTokenViewModel generateTokenViewModel)
         {
             var token = await _tokenService.GetToken(generateTokenViewModel.TokenKey);
@@ -69,7 +70,8 @@ namespace TA.App.Controllers
             var savedToken = await _tokenService.SaveToken(token);
             return Ok(savedToken);
         }
-
+        
+        [HttpPost]
         public async Task<ActionResult> GenerateToken([FromBody] GenerateTokenViewModel generateTokenViewModel)
         {
             var expiryDate = DetermineExpiryDate();

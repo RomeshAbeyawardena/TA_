@@ -4,6 +4,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TA.Contracts;
+using TA.Contracts.Providers;
 using TA.Domains.Extensions;
 
 namespace TA.Data
@@ -12,6 +13,8 @@ namespace TA.Data
         where TDbContext : DbContext
         where T : class
     {
+        private readonly IDefaultValueProvider<T> _defaultValueProvider;
+
         public T Attach(T entity)
         {
             return DbSet.Attach(entity).Entity;
@@ -33,6 +36,8 @@ namespace TA.Data
         public DbContext Context { get; }
         public async Task<T> SaveChangesAsync(T entry, bool commitChanges = true)
         {
+            _defaultValueProvider.Assign(entry);
+
             var entries = entry.GetKeyProperties();
             if (entries.All(e => e.IsDefault())) 
                 await DbSet.AddAsync(entry);
@@ -45,8 +50,9 @@ namespace TA.Data
             return entry;
         }
 
-        public DefaultRepository(TDbContext dbContext)
+        public DefaultRepository(TDbContext dbContext, IDefaultValueProvider<T> defaultValueProvider)
         {
+            _defaultValueProvider = defaultValueProvider;
             Context = dbContext;
         }
     }

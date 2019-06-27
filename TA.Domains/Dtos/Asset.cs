@@ -9,7 +9,7 @@ namespace TA.Domains.Dtos
         public int SiteId { get; set; }
         public string Key { get; set; }
         public string RelativeUrl { get; set; }
-        public bool Active { get; set; }
+        public bool IsActive { get; set; }
         public JObject Attributes { get; set; }
         public DateTimeOffset Created { get; set; }
         public DateTimeOffset Modified { get; set; }

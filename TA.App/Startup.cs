@@ -20,9 +20,9 @@ namespace TA
                 .RegisterServicesFromAssemblies<IServiceRegistration, TAServiceBroker>(
                     serviceBroker => serviceBroker.GetServiceAssemblies(),
                     (serviceRegistration, s) => serviceRegistration.RegisterServices(s))
+                .AddDistributedMemoryCache(options => options.SizeLimit = 64000000)
                 .AddMvc()
                 .AddJsonOptions(options => options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
-
             return services.BuildServiceProvider();
         }
 

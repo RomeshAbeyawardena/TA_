@@ -5,9 +5,9 @@ using TA.App.ViewModels;
 using TA.Contracts;
 using TA.Domains.Dtos;
 
-namespace TA.App.Controllers
+namespace TA.App.Controllers.Api
 {
-    public class SiteController : ControllerBase
+    public class SiteController : ApiControllerBase
     {
         private readonly ISiteService _siteService;
 
@@ -27,7 +27,7 @@ namespace TA.App.Controllers
         [HttpGet, RequiresApiKey(Permission.Read)]
         public async Task<ActionResult> GetSites(GetSitesViewModel getSitesViewModel)
         {
-            return Ok(await _siteService.GetSites(getSitesViewModel.ShowInActive));
+            return Ok(await Sites);
         }
     }
 }

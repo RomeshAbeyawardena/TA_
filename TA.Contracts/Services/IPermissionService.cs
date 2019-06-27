@@ -1,9 +1,12 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace TA.Contracts
 {
     public interface IPermissionService
     {
-        Task<Domains.Models.Permission> GetPermissionByName(string permissionName);
+        Domains.Models.Permission GetPermissionByName(string permissionName,
+            IEnumerable<Domains.Models.Permission> permissions);
+        Task<IEnumerable<Domains.Models.Permission>> GetPermissions();
     }
 }

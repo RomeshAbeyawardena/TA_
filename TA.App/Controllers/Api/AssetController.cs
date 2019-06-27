@@ -6,9 +6,9 @@ using TA.Contracts;
 using TA.Contracts.Services;
 using TA.Domains.Dtos;
 
-namespace TA.App.Controllers
+namespace TA.App.Controllers.Api
 {
-    public class AssetController : ControllerBase
+    public class AssetController : ApiControllerBase
     {
         private readonly ISiteService _siteService;
         private readonly IAssetService _assetService;
@@ -39,7 +39,7 @@ namespace TA.App.Controllers
         public async Task<ActionResult> GetAssets(GetAssetsViewModel getAssetsViewModel)
         {
             var site = await GetSiteByName(getAssetsViewModel.SiteName);
-            return Ok(_assetService.GetAssets(site));
+            return Ok(await _assetService.GetAssets(site));
         }
     }
 }
