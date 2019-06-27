@@ -34,9 +34,11 @@ namespace TA.Services
     }
     public class DefaultAsyncLock<TResult> : IAsyncLock<TResult>
     {
+        private readonly SemaphoreSlim _semaphoreSlim;
         private DefaultAsyncLock(Func<Task<TResult>> task)
         {
             Task = task;
+            _semaphoreSlim = new SemaphoreSlim(1, 1);
         }
 
         public static IAsyncLock<TResult> Create(Func<Task<TResult>> task)
@@ -48,7 +50,15 @@ namespace TA.Services
 
         public async Task<TResult> Invoke()
         {
-            return await Task();
+            await _semaphoreSlim.WaitAsync();
+            try
+            {
+                return await Task();
+            }
+            finally
+            {
+                _semaphoreSlim.Release(1);
+            }
         }
 
         public Func<Task<TResult>> Task { get; }

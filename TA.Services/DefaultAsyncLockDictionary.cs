@@ -7,19 +7,24 @@ namespace TA.Services
 {
     public class DefaultAsyncLockDictionary :IAsyncLockDictionary
     {
-        private readonly ConcurrentDictionary<string, IAsyncLock> _asyncLocks;
+        private readonly ConcurrentDictionary<string, IAsyncLock> _asyncLockDictionary;
 
         public DefaultAsyncLockDictionary(ConcurrentDictionary<string, IAsyncLock> asyncLocks = null)
         {
-            _asyncLocks = asyncLocks ?? new ConcurrentDictionary<string, IAsyncLock>();
+            _asyncLockDictionary = asyncLocks ?? new ConcurrentDictionary<string, IAsyncLock>();
         }
 
         public IAsyncLock GetOrCreate(string key, IAsyncLock value)
         {
-            if (_asyncLocks.TryGetValue(key, out var asyncLock))
-                return asyncLock;
+            if (_asyncLockDictionary.TryGetValue(key, out var asyncLock))
+            {
+                if(!_asyncLockDictionary.TryUpdate(key, value, asyncLock))
+                    throw  new InvalidOperationException();
 
-            if(!_asyncLocks.TryAdd(key, value))
+                return asyncLock;   
+            }
+
+            if(!_asyncLockDictionary.TryAdd(key, value))
                 throw new InvalidOperationException();
 
             return value;
