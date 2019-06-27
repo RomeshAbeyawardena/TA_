@@ -32,12 +32,20 @@ namespace TA.Services
 
         public IAsyncLock GetOrCreate(string key, Func<Task> action)
         {
-            return GetOrCreate(key, DefaultAsyncLock.Create(action));
+            return GetOrCreate(key, DefaultAsyncLock.Create(options => { 
+                options.Task = action;
+                options.Initial = 1;
+                options.Maximum = 1;
+            }));
         }
 
         public IAsyncLock<T> GetOrCreate<T>(string key, Func<Task<T>> action)
         {
-            if (GetOrCreate(key, DefaultAsyncLock<T>.Create(action)) is IAsyncLock<T> genericLockAsync)
+            if (GetOrCreate(key, DefaultAsyncLock<T>.Create(options => { 
+                options.Task = action;
+                options.Initial = 1;
+                options.Maximum = 1;
+            })) is IAsyncLock<T> genericLockAsync)
                 return genericLockAsync;
 
             return null;

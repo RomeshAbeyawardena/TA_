@@ -2,29 +2,31 @@
 using System.Threading;
 using System.Threading.Tasks;
 using TA.Contracts;
+using TA.Domains.Options;
 
 namespace TA.Services
 {
     public class DefaultAsyncLock : IAsyncLock
     {
         private readonly SemaphoreSlim _semaphoreSlim;
-        private DefaultAsyncLock(Func<Task> task)
+        private readonly AsyncLockOptions _asyncLockOptions;
+        private DefaultAsyncLock(Action<AsyncLockOptions> asyncLockOptions)
         {
-            Task = task;
+            _asyncLockOptions = new AsyncLockOptions();
+            asyncLockOptions(_asyncLockOptions);
             _semaphoreSlim = new SemaphoreSlim(1, 1);
         }
 
-        public static IAsyncLock Create(Func<Task> task)
+        public static IAsyncLock Create(Action<AsyncLockOptions> asyncLockOptions)
         {
-            return new DefaultAsyncLock(task);
+            return new DefaultAsyncLock(asyncLockOptions);
         }
-        public Func<Task> Task { get; }
         public async Task Invoke()
         {
             await _semaphoreSlim.WaitAsync();
             try
             {
-                await Task();
+                await _asyncLockOptions.Task();
             }
             finally
             {
@@ -35,33 +37,31 @@ namespace TA.Services
     public class DefaultAsyncLock<TResult> : IAsyncLock<TResult>
     {
         private readonly SemaphoreSlim _semaphoreSlim;
-        private DefaultAsyncLock(Func<Task<TResult>> task)
+        private readonly AsyncLockOptions<TResult> _asyncLockOptions;
+        private DefaultAsyncLock(Action<AsyncLockOptions<TResult>> asyncLockOptions)
         {
-            Task = task;
+            _asyncLockOptions = new AsyncLockOptions<TResult>();
+            asyncLockOptions(_asyncLockOptions);
             _semaphoreSlim = new SemaphoreSlim(1, 1);
         }
 
-        public static IAsyncLock<TResult> Create(Func<Task<TResult>> task)
+        public static IAsyncLock<TResult> Create(Action<AsyncLockOptions<TResult>> asyncLockOptions)
         {
-            return new DefaultAsyncLock<TResult>(task);
+            return new DefaultAsyncLock<TResult>(asyncLockOptions);
         }
-
-        Func<Task> IAsyncLock.Task => Task;
 
         public async Task<TResult> Invoke()
         {
             await _semaphoreSlim.WaitAsync();
             try
             {
-                return await Task();
+                return await _asyncLockOptions.Task();
             }
             finally
             {
                 _semaphoreSlim.Release(1);
             }
         }
-
-        public Func<Task<TResult>> Task { get; }
 
         Task IAsyncLock.Invoke()
         {
