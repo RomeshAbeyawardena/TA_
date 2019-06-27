@@ -3,11 +3,28 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace TA.Domains.Extensions
 {
     public static class ObjectExtensions
     {
+        public static async Task ForEach<T>(this IEnumerable<T> items, Func<T, Task> action)
+        {
+            foreach (var item in items)
+            {
+                await action(item);   
+            }
+        }
+
+        public static void ForEach<T>(this IEnumerable<T> items, Action<T> action)
+        {
+            foreach (var item in items)
+            {
+                action(item);   
+            }
+        }
+
         public static IEnumerable<object> GetKeyProperties(this object value)
         {
             return value.GetType().GetProperties()

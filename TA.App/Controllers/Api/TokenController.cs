@@ -28,7 +28,7 @@ namespace TA.App.Controllers.Api
                                                   ?? Domains.Constants.Data.DefaultTokenExpiryPeriodInDays);
         }
 
-        private IEnumerable<TokenPermission> AssignTokenPermissions(IEnumerable<string> permissions)
+        private async Task<IEnumerable<TokenPermission>> AssignTokenPermissions(IEnumerable<string> permissions)
         {
             var dateNow = _dateTimeProvider.Now;
             var expiryDate = DetermineExpiryDate();
@@ -37,7 +37,7 @@ namespace TA.App.Controllers.Api
 
             foreach (var permissionName in permissions)
             {
-                var permission = _permissionService.GetPermissionByName(permissionName, Permissions);
+                var permission = _permissionService.GetPermissionByName(permissionName, await Permissions);
 
                 tokenPermissionList.Add(new TokenPermission
                 {
@@ -65,7 +65,7 @@ namespace TA.App.Controllers.Api
         {
             var token = await _tokenService.GetToken(generateTokenViewModel.TokenKey);
             token = _tokenService.ClearTokenPermissions(token);
-            token.TokenPermissions = AssignTokenPermissions(generateTokenViewModel.Permissions).ToList();
+            token.TokenPermissions = (await AssignTokenPermissions(generateTokenViewModel.Permissions)).ToList();
 
             var savedToken = await _tokenService.SaveToken(token);
             return Ok(savedToken);
@@ -80,7 +80,7 @@ namespace TA.App.Controllers.Api
             var generatedToken = _tokenService.GenerateToken(tokenKey, expiryDate);
 
             if (generateTokenViewModel.Permissions.Any())
-                generatedToken.TokenPermissions = AssignTokenPermissions(generateTokenViewModel.Permissions).ToArray();
+                generatedToken.TokenPermissions = (await AssignTokenPermissions(generateTokenViewModel.Permissions)).ToArray();
                 
             var savedToken = await _tokenService.SaveToken(generatedToken);
             return Ok(savedToken);

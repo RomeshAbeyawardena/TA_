@@ -8,6 +8,7 @@ using Microsoft.Extensions.Caching.Distributed;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using TA.Contracts.Providers;
+using TA.Domains.Extensions;
 
 namespace TA.Services.Providers
 {
@@ -23,14 +24,26 @@ namespace TA.Services.Providers
 
         public async Task<T> Get<T>(CacheType cacheType, string key)
         {
+            if (!_keyEntries.Contains(key))
+                return default;
+
             var result = await _distributedCache.GetStringAsync(key, CancellationToken.None);
             return result == null ? default : JToken.Parse(result).ToObject<T>();
         }
 
         public async Task Set<T>(CacheType cacheType, string key, T value)
         {
+            _keyEntries.Add(key);
             var val = JToken.FromObject(value).ToString();
             await _distributedCache.SetStringAsync(key, val);
+        }
+
+        public async Task Clear()
+        {
+            await _keyEntries.ForEach(async(key) => 
+                await _distributedCache.RemoveAsync(key));
+
+            _keyEntries.Clear();
         }
 
 

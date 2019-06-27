@@ -8,6 +8,7 @@ using TA.Contracts;
 using TA.Contracts.Providers;
 using TA.Domains.Constants;
 using TA.Domains.Exceptions;
+using TA.Domains.Models;
 using WebToolkit.Contracts.Providers;
 using Permission = TA.Domains.Models.Permission;
 
@@ -58,15 +59,26 @@ namespace TA.App.Controllers
             }
         }
 
-        public IEnumerable<Permission> Permissions
+        public Task<IEnumerable<Permission>> Permissions
         {
             get
             {
                 var permissionService = GetRequiredService<IPermissionService>();
                 var permissions = LoadAsync(CacheType.DistributedCache, Caching.PermissionsCacheKey,
-                    async () => await permissionService.GetPermissions()).Result;
+                    async () => await permissionService.GetPermissions());
 
                 return permissions;
+            }
+        }
+
+        public Task<IEnumerable<Domains.Dtos.Site>> Sites
+        {
+            get
+            {
+                var siteService = GetRequiredService<ISiteService>();
+                    var sites = LoadAsync(CacheType.DistributedCache, Caching.SiteCacheKey,
+                        async () => await siteService.GetSites());
+                    return sites;
             }
         }
 
