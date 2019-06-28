@@ -12,6 +12,7 @@ namespace TA.Services
         private readonly IList<Action<INotification>> _notificationTriggerList;
         private readonly ConcurrentQueue<INotification> _notifyHandlerQueue;
         private readonly Timer _timer; 
+
         public DefaultNotificationHandler()
         {
             _notificationTriggerList = new List<Action<INotification>>();
