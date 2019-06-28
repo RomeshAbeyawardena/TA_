@@ -34,6 +34,7 @@ namespace TA.Services
         {
             return GetOrCreate(key, DefaultAsyncLock.Create(options => { 
                 options.Task = action;
+                options.ReleaseCount = 1;
                 options.Initial = 1;
                 options.Maximum = 1;
             }));
@@ -43,6 +44,7 @@ namespace TA.Services
         {
             if (GetOrCreate(key, DefaultAsyncLock<T>.Create(options => { 
                 options.Task = action;
+                options.ReleaseCount = 1;
                 options.Initial = 1;
                 options.Maximum = 1;
             })) is IAsyncLock<T> genericLockAsync)

@@ -14,7 +14,7 @@ namespace TA.Services
         {
             _asyncLockOptions = new AsyncLockOptions();
             asyncLockOptions(_asyncLockOptions);
-            _semaphoreSlim = new SemaphoreSlim(1, 1);
+            _semaphoreSlim = new SemaphoreSlim(_asyncLockOptions.Initial, _asyncLockOptions.Maximum);
         }
 
         public static IAsyncLock Create(Action<AsyncLockOptions> asyncLockOptions)
@@ -30,7 +30,7 @@ namespace TA.Services
             }
             finally
             {
-                _semaphoreSlim.Release(1);
+                _semaphoreSlim.Release(_asyncLockOptions.ReleaseCount);
             }
         }
     }
@@ -42,7 +42,7 @@ namespace TA.Services
         {
             _asyncLockOptions = new AsyncLockOptions<TResult>();
             asyncLockOptions(_asyncLockOptions);
-            _semaphoreSlim = new SemaphoreSlim(1, 1);
+            _semaphoreSlim = new SemaphoreSlim(_asyncLockOptions.Initial, _asyncLockOptions.Maximum);
         }
 
         public static IAsyncLock<TResult> Create(Action<AsyncLockOptions<TResult>> asyncLockOptions)
@@ -59,7 +59,7 @@ namespace TA.Services
             }
             finally
             {
-                _semaphoreSlim.Release(1);
+                _semaphoreSlim.Release(_asyncLockOptions.ReleaseCount);
             }
         }
 
