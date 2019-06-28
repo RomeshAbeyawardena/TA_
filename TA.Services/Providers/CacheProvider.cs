@@ -13,12 +13,14 @@ namespace TA.Services.Providers
     {
         private readonly IDistributedCache _distributedCache;
         private readonly IAsyncLockDictionary _asyncLockDictionary;
+        private readonly INotificationHandler _notificationHandler;
 
-        public CacheProvider(IDistributedCache distributedCache, IAsyncLockDictionary asyncLockDictionary)
+        public CacheProvider(IDistributedCache distributedCache, IAsyncLockDictionary asyncLockDictionary, INotificationHandler notificationHandler)
         {
             _keyEntries = new List<string>();
             _distributedCache = distributedCache;
             _asyncLockDictionary = asyncLockDictionary;
+            _notificationHandler = notificationHandler;
         }
 
         public async Task<T> Get<T>(CacheType cacheType, string key)
@@ -28,6 +30,7 @@ namespace TA.Services.Providers
                 if (!_keyEntries.Contains(key))
                     return default;
                 var result = await _distributedCache.GetStringAsync(key, CancellationToken.None);
+                _notificationHandler.Enqueue(new DefaultNotification<string>());
                 return result == null ? default : JToken.Parse(result).ToObject<T>();
             }).Invoke();
         }

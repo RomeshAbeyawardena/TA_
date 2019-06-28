@@ -22,6 +22,7 @@ namespace TA.Services
                 .AddSingleton<IMapperProvider, MapperProvider>()
                 .AddSingleton<ICryptographyProvider, CryptographyProvider>()
                 .AddSingleton<ICacheProvider, CacheProvider>()
+                .AddSingleton<INotificationHandler, DefaultNotificationHandler>()
                 .AddSingleton<IAsyncLockDictionary, DefaultAsyncLockDictionary>()
                 .AddDefaultValueProvider<Site>(site => { site.IsActive = true; })
                 .AddDefaultValueProvider<Asset>(asset => { asset.IsActive = true; })
