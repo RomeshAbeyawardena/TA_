@@ -7,10 +7,12 @@ namespace TA.Services
 {
     public class DefaultAsyncLockDictionary :IAsyncLockDictionary
     {
+        private readonly INotificationHandler _notificationHandler;
         private readonly ConcurrentDictionary<string, IAsyncLock> _asyncLockDictionary;
 
-        public DefaultAsyncLockDictionary(ConcurrentDictionary<string, IAsyncLock> asyncLocks = null)
+        public DefaultAsyncLockDictionary(INotificationHandler notificationHandler, ConcurrentDictionary<string, IAsyncLock> asyncLocks = null)
         {
+            _notificationHandler = notificationHandler;
             _asyncLockDictionary = asyncLocks ?? new ConcurrentDictionary<string, IAsyncLock>();
         }
 
@@ -20,7 +22,7 @@ namespace TA.Services
             {
                 if(!_asyncLockDictionary.TryUpdate(key, value, asyncLock))
                     throw  new InvalidOperationException();
-
+                _notificationHandler.Enqueue(new DefaultNotification<string>().Notify("Added"));
                 return asyncLock;   
             }
 

@@ -18,7 +18,8 @@ namespace TA.Services
         public void RegisterServices(IServiceCollection services)
         {
             services
-                .AddHostedService<DefaultNotificationHandler>()
+                .AddHostedService<NotificationDispatcherHostedService>()
+                .AddSingleton<INotificationHandler, DefaultNotificationHandler>()
                 .AddSingleton<IDateTimeProvider, DateTimeProvider>()
                 .AddSingleton<IMapperProvider, MapperProvider>()
                 .AddSingleton<ICryptographyProvider, CryptographyProvider>()

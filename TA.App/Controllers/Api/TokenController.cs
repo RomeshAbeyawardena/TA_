@@ -21,6 +21,7 @@ namespace TA.App.Controllers.Api
         private readonly ITokenService _tokenService;
         private readonly ITokenKeyGenerator _tokenKeyGenerator;
         private readonly IPermissionService _permissionService;
+        private readonly INotificationHandler _notificationHandler;
 
         private DateTimeOffset DetermineExpiryDate()
         {
@@ -51,13 +52,16 @@ namespace TA.App.Controllers.Api
         }
 
         public TokenController(IApplicationSettings applicationSettings, IDateTimeProvider dateTimeProvider, 
-            ITokenService tokenService, ITokenKeyGenerator tokenKeyGenerator, IPermissionService permissionService)
+            ITokenService tokenService, ITokenKeyGenerator tokenKeyGenerator, IPermissionService permissionService,
+            INotificationHandler notificationHandler)
         {
             _applicationSettings = applicationSettings;
             _dateTimeProvider = dateTimeProvider;
             _tokenService = tokenService;
             _tokenKeyGenerator = tokenKeyGenerator;
             _permissionService = permissionService;
+            _notificationHandler = notificationHandler;
+            _notificationHandler.Subscribe(notification => Console.WriteLine(notification.EventResult));
         }
 
         [HttpPost]

@@ -6,9 +6,10 @@ namespace TA.Services
     public abstract class DefaultNotification : INotification
     {
         public object EventResult { get; private set; }
-        public void Notify(object eventResult)
+        public INotification Notify(object eventResult)
         {
             EventResult = eventResult;
+            return this;
         }
     }
 
@@ -16,9 +17,10 @@ namespace TA.Services
     {
         public new TResult EventResult => (TResult)base.EventResult;
 
-        public void Notify(TResult eventResult)
+        public INotification<TResult> Notify(TResult eventResult)
         {
             base.Notify(eventResult);
+            return this;
         }
     }
 }
