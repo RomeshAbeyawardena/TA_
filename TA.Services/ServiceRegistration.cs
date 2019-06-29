@@ -18,11 +18,11 @@ namespace TA.Services
         public void RegisterServices(IServiceCollection services)
         {
             services
+                .AddHostedService<DefaultNotificationHandler>()
                 .AddSingleton<IDateTimeProvider, DateTimeProvider>()
                 .AddSingleton<IMapperProvider, MapperProvider>()
                 .AddSingleton<ICryptographyProvider, CryptographyProvider>()
                 .AddSingleton<ICacheProvider, CacheProvider>()
-                .AddSingleton<INotificationHandler, DefaultNotificationHandler>()
                 .AddSingleton<IAsyncLockDictionary, DefaultAsyncLockDictionary>()
                 .AddDefaultValueProvider<Site>(site => { site.IsActive = true; })
                 .AddDefaultValueProvider<Asset>(asset => { asset.IsActive = true; })

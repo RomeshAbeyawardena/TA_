@@ -12,6 +12,8 @@ namespace TA
 {
     public class Startup : IStartup
     {
+        private readonly INotificationHandler _notificationHandler;
+
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services
@@ -23,25 +25,10 @@ namespace TA
                 .AddDistributedMemoryCache(options => options.SizeLimit = 64000000)
                 .AddMvc()
                 .AddJsonOptions(options => options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
-            return Do(services.BuildServiceProvider());
+            return services.BuildServiceProvider();
         }
 
-        public IServiceProvider Do(ServiceProvider services)
-        {
-           var notificationHandler = services.GetRequiredService<INotificationHandler>();
-           var aa = new System.Timers.Timer(1000);
-
-            aa.Elapsed += Aa_Elapsed;
-            aa.Start();
-            
-           return services;
-        }
-
-        private void Aa_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
-        {
-            Console.WriteLine(e.SignalTime.Ticks);
-        }
-
+         
         public void Configure(IApplicationBuilder app)
         {
             app.UseMvcWithDefaultRoute();

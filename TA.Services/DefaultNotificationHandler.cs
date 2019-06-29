@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using TA.Contracts;
 using System.Timers;
+using Timer = System.Timers.Timer;
 
 namespace TA.Services
 {
@@ -69,7 +72,20 @@ namespace TA.Services
 
         public void Dispose()
         {
+            _timer.Stop();
             _timer.Dispose();
+        }
+
+        public Task StartAsync(CancellationToken cancellationToken)
+        {
+            _timer.Start();
+            return Task.CompletedTask;
+        }
+
+        public Task StopAsync(CancellationToken cancellationToken)
+        {
+            _timer.Stop();
+            return Task.CompletedTask;
         }
     }
 }
