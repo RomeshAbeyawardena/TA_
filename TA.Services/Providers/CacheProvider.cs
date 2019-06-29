@@ -30,7 +30,7 @@ namespace TA.Services.Providers
                 if (!_keyEntries.Contains(key))
                     return default;
                 var result = await _distributedCache.GetStringAsync(key, CancellationToken.None);
-                _notificationHandler.Enqueue(new DefaultNotification<string>());
+                _notificationHandler.Enqueue(new DefaultNotification<string>().Notify($"CacheProvider: Get called for key: {key}"));
                 return result == null ? default : JToken.Parse(result).ToObject<T>();
             }).Invoke();
         }
@@ -41,6 +41,7 @@ namespace TA.Services.Providers
             {
                 _keyEntries.Add(key);
                 var val = JToken.FromObject(value).ToString();
+                _notificationHandler.Enqueue(new DefaultNotification<string>().Notify($"CacheProvider: Set called for key: {key}"));
                 await _distributedCache.SetStringAsync(key, val);
             }).Invoke();
         }

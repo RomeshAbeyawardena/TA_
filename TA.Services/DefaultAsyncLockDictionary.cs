@@ -22,13 +22,14 @@ namespace TA.Services
             {
                 if(!_asyncLockDictionary.TryUpdate(key, value, asyncLock))
                     throw  new InvalidOperationException();
-                _notificationHandler.Enqueue(new DefaultNotification<string>().Notify("Added"));
+
+                _notificationHandler.Enqueue(new DefaultNotification<string>().Notify($"DefaultAsyncLockDictionary: Used {key} existing Async lock"));
                 return asyncLock;   
             }
 
             if(!_asyncLockDictionary.TryAdd(key, value))
                 throw new InvalidOperationException();
-
+            _notificationHandler.Enqueue(new DefaultNotification<string>().Notify($"DefaultAsyncLockDictionary: Added {key} Async lock"));
             return value;
         }
 

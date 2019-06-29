@@ -8,12 +8,12 @@ namespace TA.Services
     public class DefaultNotificationHandler : INotificationHandler
     {
         private readonly object _lockObject = new object();
-        private readonly IList<Action<INotification>> _notificationTriggerList;
+        private readonly IDictionary<string, Action<INotification>> _notificationTriggerList;
         private readonly ConcurrentQueue<INotification> _notifyHandlerQueue;
 
         public DefaultNotificationHandler()
         {
-            _notificationTriggerList = new List<Action<INotification>>();
+            _notificationTriggerList = new Dictionary<string, Action<INotification>>();
             _notifyHandlerQueue = new ConcurrentQueue<INotification>();
         }
 
@@ -39,11 +39,12 @@ namespace TA.Services
                 : null;
         }
 
-        public void Subscribe(Action<INotification> notificationTrigger)
+        public void Subscribe(Action<INotification> notificationTrigger, string callerMember = "")
         {
             lock (_lockObject)
             {
-                _notificationTriggerList.Add(notificationTrigger);
+                if(!_notificationTriggerList.ContainsKey(callerMember))
+                    _notificationTriggerList.Add(callerMember, notificationTrigger);
             }
         }
 
@@ -55,14 +56,12 @@ namespace TA.Services
                 var nextNotification = Dequeue();
                 while (nextNotification != null)
                 {
-                    nextNotification = Dequeue();
-
+                    notificationCount++;
                     foreach (var notificationTrigger in _notificationTriggerList)
                     {
-                        notificationTrigger(nextNotification);
+                        notificationTrigger.Value(nextNotification);
                     }
-
-                    notificationCount++;
+                    nextNotification = Dequeue();
                 }
 
                 return notificationCount;

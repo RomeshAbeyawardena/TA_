@@ -55,13 +55,18 @@ namespace TA.App.Controllers.Api
             ITokenService tokenService, ITokenKeyGenerator tokenKeyGenerator, IPermissionService permissionService,
             INotificationHandler notificationHandler)
         {
+            _notificationHandler = notificationHandler;
+            _notificationHandler.Subscribe(notification =>
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine(notification.EventResult);
+                Console.ResetColor();
+            }, nameof(TokenController));
             _applicationSettings = applicationSettings;
             _dateTimeProvider = dateTimeProvider;
             _tokenService = tokenService;
             _tokenKeyGenerator = tokenKeyGenerator;
             _permissionService = permissionService;
-            _notificationHandler = notificationHandler;
-            _notificationHandler.Subscribe(notification => Console.WriteLine(notification.EventResult));
         }
 
         [HttpPost]

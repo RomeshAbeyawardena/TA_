@@ -15,7 +15,11 @@ namespace TA.Services
         
         private void Elapsed(object sender, ElapsedEventArgs e)
         {
-            Console.WriteLine("{0}: Processed {1} notifications", e.SignalTime, _notificationHandler.ProcessAll());
+            var proccessedCount = _notificationHandler.ProcessAll();
+//#if DEBUG == false
+            if(proccessedCount > 1)
+//#endif
+            Console.WriteLine("{0}: Processed {1} notifications", e.SignalTime, proccessedCount);
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
