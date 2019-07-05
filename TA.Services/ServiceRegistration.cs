@@ -2,12 +2,11 @@
 using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
 using TA.Contracts;
-using TA.Contracts.Providers;
 using TA.Contracts.Services;
 using TA.Domains.Models;
 using TA.Services.Extensions;
-using TA.Services.Providers;
 using WebToolkit.Common.Providers;
+using WebToolkit.Contracts;
 using WebToolkit.Contracts.Providers;
 using Permission = TA.Domains.Models.Permission;
 
@@ -18,7 +17,7 @@ namespace TA.Services
         public void RegisterServices(IServiceCollection services)
         {
             services
-                .AddHostedService<NotificationDispatcherHostedService>()
+                .AddHostedService<CacheFlusherHostedService>()
                 .AddSingleton<INotificationHandler, DefaultNotificationHandler>()
                 .AddSingleton<IDateTimeProvider, DateTimeProvider>()
                 .AddSingleton<IMapperProvider, MapperProvider>()

@@ -8,12 +8,10 @@ using TA.Contracts;
 using TA.Domains.Extensions;
 using TA.ServiceBroker;
 
-namespace TA
+namespace TA.App
 {
     public class Startup : IStartup
     {
-        private readonly INotificationHandler _notificationHandler;
-
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services

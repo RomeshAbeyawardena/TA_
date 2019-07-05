@@ -7,9 +7,8 @@ using TA.Domains.Contracts;
 
 namespace TA.Domains.Models
 {
-    public class Asset : ICreated, IModified
+    public class Asset : IIdentity, ICreated, IModified
     {
-        [Key] public int Id { get; set; }
         public int SiteId { get; set; }
         public string Key { get; set; }
         public string RelativeUrl { get; set; }
@@ -26,5 +25,6 @@ namespace TA.Domains.Models
             get =>  JObject.Parse(JsonAttributes);
             set => JsonAttributes = value.ToString(Formatting.None);
         }
-}
+        [Key] public int Id { get; set; }
+    }
 }

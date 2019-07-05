@@ -4,5 +4,6 @@
     {
         public const string PermissionsCacheKey = "PermissionsCache";
         public const string SiteCacheKey = "SitesCache";
+        public const string TokenPermissionCacheKey = "TokenCache";
     }
 }

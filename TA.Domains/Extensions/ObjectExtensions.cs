@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using TA.Domains.Contracts;
 
 namespace TA.Domains.Extensions
 {
@@ -27,7 +28,9 @@ namespace TA.Domains.Extensions
 
         public static IEnumerable<object> GetKeyProperties(this object value)
         {
-            return value.GetType().GetProperties()
+            var valueType = value.GetType();
+
+            return valueType.GetProperties()
                 .Where(a => a.GetCustomAttribute(typeof(KeyAttribute)) != null)
                 .Select(pi => pi.GetValue(value)).ToArray();
         }

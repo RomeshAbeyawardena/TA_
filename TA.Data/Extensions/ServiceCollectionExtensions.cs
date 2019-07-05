@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using TA.Contracts;
+using WebToolkit.Contracts.Data;
 
 namespace TA.Data.Extensions
 {

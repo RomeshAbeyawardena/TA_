@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using TA.App.Attributes;
 using TA.App.ViewModels;
 using TA.Contracts;
-using TA.Contracts.Providers;
-using TA.Domains.Enumerations;
+using TA.Contracts.Services;
 using TA.Domains.Models;
-using Permission = TA.Contracts.Permission;
+using WebToolkit.Contracts.Providers;
+using Permission = TA.Contracts.Services.Permission;
 
 namespace TA.App.Controllers.Api
 {
@@ -21,6 +22,7 @@ namespace TA.App.Controllers.Api
         private readonly ITokenService _tokenService;
         private readonly ITokenKeyGenerator _tokenKeyGenerator;
         private readonly IPermissionService _permissionService;
+        private readonly ILogger<TokenController> _logger;
         private readonly INotificationHandler _notificationHandler;
 
         private DateTimeOffset DetermineExpiryDate()
@@ -51,16 +53,15 @@ namespace TA.App.Controllers.Api
             return tokenPermissionList;
         }
 
-        public TokenController(IApplicationSettings applicationSettings, IDateTimeProvider dateTimeProvider, 
+        public TokenController(ILogger<TokenController> logger, IApplicationSettings applicationSettings, IDateTimeProvider dateTimeProvider, 
             ITokenService tokenService, ITokenKeyGenerator tokenKeyGenerator, IPermissionService permissionService,
             INotificationHandler notificationHandler)
         {
+            _logger = logger;
             _notificationHandler = notificationHandler;
             _notificationHandler.Subscribe(notification =>
             {
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine(notification.EventResult);
-                Console.ResetColor();
+                _logger.LogInformation("{0}", notification.EventResult);
             }, nameof(TokenController));
             _applicationSettings = applicationSettings;
             _dateTimeProvider = dateTimeProvider;
@@ -72,7 +73,7 @@ namespace TA.App.Controllers.Api
         [HttpPost]
         public async Task<ActionResult> AssignTokenPermissions([FromBody] GenerateTokenViewModel generateTokenViewModel)
         {
-            var token = await _tokenService.GetToken(generateTokenViewModel.TokenKey);
+            var token = _tokenService.GetToken(await Tokens, generateTokenViewModel.TokenKey);
             token = _tokenService.ClearTokenPermissions(token);
             token.TokenPermissions = (await AssignTokenPermissions(generateTokenViewModel.Permissions)).ToList();
 

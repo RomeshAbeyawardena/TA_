@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using TA.Contracts;
-using TA.Contracts.Providers;
+using TA.Contracts.Services;
 using TA.Domains.Models;
-using Permission = TA.Contracts.Permission;
+using WebToolkit.Contracts.Data;
+using WebToolkit.Contracts.Providers;
+using Permission = TA.Contracts.Services.Permission;
 
 namespace TA.Services
 {
@@ -28,11 +29,10 @@ namespace TA.Services
             return token;
         }
 
-        public async Task<Token> GetToken(string tokenKey)
+        public Token GetToken(IEnumerable<Token> tokens, string tokenKey)
         {
-            return await _tokenRepository.Query()
-                .Include(token => token.TokenPermissions)
-                .SingleOrDefaultAsync(token => token.Key == tokenKey);
+            return tokens
+                .SingleOrDefault(token => token.Key == tokenKey);
         }
 
 
@@ -62,6 +62,19 @@ namespace TA.Services
         public async Task<Token> SaveToken(Token generatedToken)
         {
             return await _tokenRepository.SaveChangesAsync(generatedToken);
+        }
+
+        public async Task<IEnumerable<Token>> GetTokens()
+        {
+            return await _tokenRepository.Query()
+                .Include(token => token.TokenPermissions)
+                .ToArrayAsync();
+        }
+
+
+        public async Task<int> GetTokenMaxId()
+        {
+            return await _tokenRepository.Query().MaxAsync(a => a.Id);
         }
 
         public TokenService(IRepository<Token> tokenRepository, IDateTimeProvider dateTimeProvider)

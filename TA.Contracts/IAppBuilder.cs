@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using WebToolkit.Contracts;
 
-namespace TA
+namespace TA.Contracts
 {
     public interface IAppBuilder<out TStart> where TStart : class
     {

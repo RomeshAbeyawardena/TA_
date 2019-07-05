@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using TA.Contracts;
 
-namespace TA
+namespace TA.App
 {
     public class TAApplicationSettings : IApplicationSettings
     {

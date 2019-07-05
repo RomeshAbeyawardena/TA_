@@ -3,7 +3,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TA.Contracts;
+using TA.Contracts.Services;
 using TA.Domains.Dtos;
+using WebToolkit.Contracts.Data;
 using WebToolkit.Contracts.Providers;
 
 namespace TA.Services
@@ -35,11 +37,10 @@ namespace TA.Services
         }
 
 
-        public async Task<Site> GetSite(string name, bool trackEntity)
+        public Site GetSite(IEnumerable<Site> sites, string name)
         {
-            return Map(await _siteRepository
-                .Query(trackingQuery: trackEntity)
-                .FirstOrDefaultAsync(site => site.Name == name));
+            return sites
+                .FirstOrDefault(site => site.Name == name);
         }
 
         public async Task<Site> GetSite(int id)

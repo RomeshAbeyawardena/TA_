@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using TA.Contracts.Providers;
+using WebToolkit.Contracts.Providers;
 
 namespace TA.App.Controllers.Api
 {

@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
-using TA.Contracts.Providers;
-using TA.Services.Providers;
+using WebToolkit.Common.Providers;
+using WebToolkit.Contracts.Providers;
 
 namespace TA.Services.Extensions
 {

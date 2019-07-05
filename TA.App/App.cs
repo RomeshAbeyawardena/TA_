@@ -19,7 +19,7 @@ namespace TA.App
 
         public async Task<int> Begin()
         {
-            return 0;
+            return await Task.FromResult(1);
         }
     }
 }

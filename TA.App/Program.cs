@@ -1,4 +1,6 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
@@ -13,8 +15,12 @@ namespace TA.App
 {
     public static class Program
     {
+        [DllImport("User32.dll", CharSet=CharSet.Unicode)] 
+        public static extern int MessageBox(IntPtr h, string m, string c, int type);
+
         public static async Task<int> Main(string[] args)
         {
+            var m = MessageBox((IntPtr)0, "your mum", "My Message Box", 1);
             await Task.WhenAll(DefaultAppBuilder<App>
                 .CreateBuilder(entryPointAsync: app => app.Begin())
                 .RegisterServices(RegisterServices)

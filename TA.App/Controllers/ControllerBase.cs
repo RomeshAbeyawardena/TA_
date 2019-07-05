@@ -4,8 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
-using TA.Contracts;
-using TA.Contracts.Providers;
+using TA.Contracts.Services;
 using TA.Domains.Constants;
 using TA.Domains.Exceptions;
 using TA.Domains.Models;
@@ -56,6 +55,19 @@ namespace TA.App.Controllers
             catch (InvalidModelStateException invalidModelStateException)
             {
                 context.Result = BadRequest(invalidModelStateException.ModelStateDictionary);
+            }
+        }
+
+        public Task<IEnumerable<Token>> Tokens
+        {
+            get
+            {
+                var tokenService = GetRequiredService<ITokenService>();
+
+                var tokens = LoadAsync(CacheType.DistributedCache, Caching.TokenPermissionCacheKey, 
+                    async () => await tokenService.GetTokens());
+
+                return tokens;
             }
         }
 
