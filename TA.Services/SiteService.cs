@@ -2,8 +2,9 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using TA.Contracts;
-using TA.Domains.Dtos;
+using TA.Contracts.Services;
+using TA.Domains.Models;
+using WebToolkit.Contracts.Data;
 using WebToolkit.Contracts.Providers;
 
 namespace TA.Services
@@ -18,16 +19,6 @@ namespace TA.Services
             return _mapperProvider.Map<Domains.Models.Site, Site>(site);
         }
 
-        private Site Map(Domains.Models.Site site)
-        {
-            return _mapperProvider.Map<Domains.Models.Site, Site>(site);
-        }
-
-        private Domains.Models.Site Map(Site site)
-        {
-            return _mapperProvider.Map<Site, Domains.Models.Site>(site);
-        }
-
         public SiteService(IMapperProvider mapperProvider, IRepository<Domains.Models.Site> siteRepository)
         {
             _mapperProvider = mapperProvider;
@@ -35,23 +26,22 @@ namespace TA.Services
         }
 
 
-        public async Task<Site> GetSite(string name, bool trackEntity)
+        public Site GetSite(IEnumerable<Site> sites, string name)
         {
-            return Map(await _siteRepository
-                .Query(trackingQuery: trackEntity)
-                .FirstOrDefaultAsync(site => site.Name == name));
+            return sites
+                .FirstOrDefault(site => site.Name == name);
         }
 
         public async Task<Site> GetSite(int id)
         {
-            return Map(await _siteRepository
-                .DbSet.FindAsync(id));
+            return await _siteRepository
+                .DbSet.FindAsync(id);
         }
 
         public async Task<Site> SaveSite(Site site, bool saveChanges = true)
         {
-            return Map(await _siteRepository
-                .SaveChangesAsync(Map(site), saveChanges));
+            return await _siteRepository
+                .SaveChangesAsync(site, saveChanges);
         }
 
         public async Task<IEnumerable<Site>> GetSites(bool showInActive = false)

@@ -1,5 +1,5 @@
 ﻿using System;
-using TA.Domains.Enumerations;
+using WebToolkit.Contracts.Providers;
 
 namespace TA.Contracts
 {

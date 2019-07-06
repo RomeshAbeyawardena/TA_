@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,12 +6,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
-using TA.Contracts;
 using TA.Contracts.ActionFilters;
-using TA.Contracts.Providers;
+using TA.Contracts.Services;
 using TA.Domains.Constants;
 using TA.Domains.Models;
-using Permission = TA.Contracts.Permission;
+using Permission = TA.Contracts.Services.Permission;
 
 namespace TA.App.Attributes
 {
@@ -22,7 +20,9 @@ namespace TA.App.Attributes
         private readonly Permission[] _permissions;
 
         private readonly Func<IServiceProvider, ITokenService> _getTokenService;
-        private readonly Func<IServiceProvider, ICacheProvider> _getCacheProvider;
+
+        private Controllers.ControllerBase ToControllerBase(object controller) => controller as Controllers.ControllerBase;
+
         public RequiresApiKeyAttribute(params Permission[] permissions)
         {
             _getTokenService = services => services.GetRequiredService<ITokenService>();
@@ -46,7 +46,7 @@ namespace TA.App.Attributes
         {
             try
             {
-                var token = await GetToken(context.HttpContext);
+                var token = await GetToken(context.Controller, context.HttpContext);
                 if (token != null && await IsValid(context.HttpContext, token)
                                   && HasPermissions(context.HttpContext, token, _permissions))
                 {
@@ -61,12 +61,13 @@ namespace TA.App.Attributes
             }
         }
 
-        public async Task<Token> GetToken(HttpContext httpContext)
+        public async Task<Token> GetToken(object controller, HttpContext httpContext)
         {
+            var controllerBase = ToControllerBase(controller);
             var tokenService = _getTokenService(httpContext.RequestServices);
             httpContext.Request.Headers.TryGetValue(General.ApiKey, out var apiKey);
 
-            return await tokenService.GetToken(apiKey);
+            return tokenService.GetToken(await controllerBase.Tokens, apiKey);
         }
 
         public async Task<bool> IsValid(HttpContext httpContext, Token token)

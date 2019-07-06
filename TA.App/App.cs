@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
-using TA.Contracts;
+﻿using System.Threading.Tasks;
 using TA.Contracts.Services;
 
 namespace TA.App
@@ -19,13 +16,7 @@ namespace TA.App
 
         public async Task<int> Begin()
         {
-            var site = await _siteService.GetSite("my site", false);
-            var asset = await _assetService.GetAsset(site, "FeaturedProducts", false);
-            
-            Console.WriteLine(JObject.FromObject(site));
-            Console.WriteLine(JObject.FromObject(asset));
-
-            return 0;
+            return await Task.FromResult(1);
         }
     }
 }

@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using TA.App.Attributes;
 using TA.App.ViewModels;
-using TA.Contracts;
 using TA.Contracts.Services;
-using TA.Domains.Dtos;
+using TA.Domains.Models;
+using Permission = TA.Contracts.Services.Permission;
 
 namespace TA.App.Controllers.Api
 {
@@ -15,7 +15,7 @@ namespace TA.App.Controllers.Api
 
         private async Task<Site> GetSiteByName(string name)
         {
-            return await _siteService.GetSite(name, true);
+            return _siteService.GetSite(await Sites, name);
         }
 
         public AssetController(ISiteService siteService, IAssetService assetService)

@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using TA.Contracts;
-using TA.Data.Extensions;
-using TA.Domains.Extensions;
 using TA.Domains.Models;
+using WebToolkit.Contracts;
+using WebToolkit.Common.Extensions;
 using Permission = TA.Domains.Models.Permission;
 
 namespace TA.Data

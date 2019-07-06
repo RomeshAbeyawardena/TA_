@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.Extensions.DependencyInjection;
-using TA.Contracts;
-using TA.Contracts.Providers;
+using TA.Contracts.Services;
 using TA.Domains.Constants;
 using TA.Domains.Exceptions;
 using TA.Domains.Models;
@@ -14,32 +11,16 @@ using Permission = TA.Domains.Models.Permission;
 
 namespace TA.App.Controllers
 {
-    public abstract class ControllerBase : Controller
+    public abstract class ControllerBase : WebToolkit.Common.ControllerBase
     {
-        public TServiceImplementation GetRequiredService<TServiceImplementation>()
+        private async Task<IEnumerable<TModel>> GetCacheAsync<TModel, TService>(string cacheKey, Func<TService, Task<IEnumerable<TModel>>> get)
         {
-            if (HttpContext == null)
-                throw new InvalidOperationException("HttpContext unavailable.");
-            return HttpContext
-                .RequestServices.GetRequiredService<TServiceImplementation>();
-        }
-
-        private IMapperProvider MapperProvider => GetRequiredService<IMapperProvider>();
-
-        private async Task<T> LoadAsync<T>(CacheType cacheType, string key, Func<Task<T>> loader)
-        {
-            var cacheProvider = GetRequiredService<ICacheProvider>();
-            var result = await cacheProvider.Get<T>(cacheType, key);
-
-            if (result != null)
-                return result;
-
-            result = await loader();
-            await cacheProvider.Set(cacheType, key, result);
+            var service = GetRequiredService<TService>();
+            var result = await LoadAsync(CacheType.DistributedCache, cacheKey, async() =>
+                await get(service));
 
             return result;
         }
-
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             try
@@ -59,30 +40,15 @@ namespace TA.App.Controllers
             }
         }
 
-        public Task<IEnumerable<Permission>> Permissions
-        {
-            get
-            {
-                var permissionService = GetRequiredService<IPermissionService>();
-                var permissions = LoadAsync(CacheType.DistributedCache, Caching.PermissionsCacheKey,
-                    async () => await permissionService.GetPermissions());
+        public Task<IEnumerable<Token>> Tokens => 
+            GetCacheAsync<Token, ITokenService>(Caching.TokenCacheKey, tokenService => tokenService.GetTokens());
 
-                return permissions;
-            }
-        }
+        public Task<IEnumerable<Permission>> Permissions =>
+            GetCacheAsync<Permission, IPermissionService>(Caching.PermissionsCacheKey,
+                permissionService => permissionService.GetPermissions());
 
-        public Task<IEnumerable<Domains.Dtos.Site>> Sites
-        {
-            get
-            {
-                var siteService = GetRequiredService<ISiteService>();
-                    var sites = LoadAsync(CacheType.DistributedCache, Caching.SiteCacheKey,
-                        async () => await siteService.GetSites());
-                    return sites;
-            }
-        }
-
-        public TDestination Map<TSource, TDestination>(TSource source) => MapperProvider.Map<TSource, TDestination>(source);
-        public IEnumerable<TDestination> Map<TSource, TDestination>(IEnumerable<TSource> source) => MapperProvider.Map<TSource, TDestination>(source);
+        public Task<IEnumerable<Site>> Sites =>
+            GetCacheAsync<Site, ISiteService>(Caching.SiteCacheKey,
+                siteService => siteService.GetSites());
     }
 }

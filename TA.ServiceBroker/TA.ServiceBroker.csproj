@@ -11,4 +11,4 @@
     <ProjectReference Include="..\TA.Domains\TA.Domains.csproj" />
     <ProjectReference Include="..\TA.Services\TA.Services.csproj" />
   </ItemGroup>
- </Project>
+</Project>

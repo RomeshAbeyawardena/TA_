@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace TA.Contracts
+namespace TA.Contracts.Services
 {
     public interface IPermissionService
     {

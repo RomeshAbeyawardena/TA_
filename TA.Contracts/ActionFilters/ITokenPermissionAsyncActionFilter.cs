@@ -7,7 +7,7 @@ namespace TA.Contracts.ActionFilters
 {
     public interface ITokenPermissionAsyncActionFilter<TToken, in TPermission> : IAsyncActionFilter
     {
-        Task<TToken> GetToken(HttpContext httpContext);
+        Task<TToken> GetToken(object controller, HttpContext httpContext);
         Task<bool> IsValid(HttpContext httpContext, TToken token);
         bool HasPermissions(HttpContext httpContext, TToken token , IEnumerable<TPermission> permissions);
     }

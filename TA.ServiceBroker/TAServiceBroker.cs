@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Reflection;
+using WebToolkit.Contracts;
 
 namespace TA.ServiceBroker
 {
