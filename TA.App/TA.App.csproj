@@ -10,7 +10,7 @@
     <PackageReference Include="Microsoft.AspNetCore" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="2.2.0" />
-    <PackageReference Include="WebToolkit.Common" Version="2.0.0.10" />
+    <PackageReference Include="WebToolkit.Common" Version="2.0.0.12" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TA.Contracts\TA.Contracts.csproj" />

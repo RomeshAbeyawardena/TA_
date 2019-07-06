@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using TA.Contracts;
-using TA.Domains.Extensions;
 using TA.Domains.Models;
 using WebToolkit.Contracts;
 using WebToolkit.Common.Extensions;

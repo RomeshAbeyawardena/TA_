@@ -7,6 +7,6 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.2.0"></PackageReference>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="AutoMapper" Version="8.1.1" />
-    <PackageReference Include="WebToolkit.Contracts" Version="2.0.0.10" />
+    <PackageReference Include="WebToolkit.Contracts" Version="2.0.0.12" />
   </ItemGroup>
  </Project>
