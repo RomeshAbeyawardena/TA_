@@ -12,4 +12,12 @@
     <ProjectReference Include="..\TA.Contracts\TA.Contracts.csproj" />
     <ProjectReference Include="..\TA.Domains\TA.Domains.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Reference Include="WebToolkit.Common">
+      <HintPath>..\..\WebToolkit\WebToolkit.Common\bin\Debug\netstandard2.0\WebToolkit.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="WebToolkit.Contracts">
+      <HintPath>..\..\WebToolkit\WebToolkit.Common\bin\Debug\netstandard2.0\WebToolkit.Contracts.dll</HintPath>
+    </Reference>
+  </ItemGroup>
  </Project>

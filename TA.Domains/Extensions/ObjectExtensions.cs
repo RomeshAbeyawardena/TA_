@@ -4,7 +4,6 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using TA.Domains.Contracts;
 
 namespace TA.Domains.Extensions
 {

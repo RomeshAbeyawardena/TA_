@@ -22,7 +22,7 @@ namespace TA.Services
         private void Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
             var hasChanged = HasEntryChanged<Token, int>(_tokenService.GetTokenMaxId(),
-                Caching.TokenPermissionCacheKey,
+                Caching.TokenCacheKey,
                 token => token.Id, (a, b) => a > b).Result;
 
             if (!hasChanged)
@@ -31,8 +31,8 @@ namespace TA.Services
                 return;
             }
 
-            _logger.LogInformation("Clearing {0}", Caching.TokenPermissionCacheKey);
-            _cacheProvider.ClearByKey(Caching.TokenPermissionCacheKey).Wait();
+            _logger.LogInformation("Clearing {0}", Caching.TokenCacheKey);
+            _cacheProvider.ClearByKey(Caching.TokenCacheKey).Wait();
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)

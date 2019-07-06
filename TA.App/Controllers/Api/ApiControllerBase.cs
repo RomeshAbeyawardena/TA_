@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Routing;
 using TA.App.Attributes;
-using TA.Contracts;
 using TA.Contracts.Services;
 
 namespace TA.App.Controllers.Api

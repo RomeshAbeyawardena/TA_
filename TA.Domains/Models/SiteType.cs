@@ -1,6 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using TA.Domains.Contracts;
+using WebToolkit.Contracts;
 
 namespace TA.Domains.Models
 {

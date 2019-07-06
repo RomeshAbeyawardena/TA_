@@ -1,5 +1,4 @@
-﻿using System;
-using TA.Contracts;
+﻿using TA.Contracts;
 
 namespace TA.Services
 {

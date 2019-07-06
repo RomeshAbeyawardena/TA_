@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Newtonsoft.Json.Linq;
-using TA.Domains.Dtos;
+using TA.Domains.Models;
 
 namespace TA.App.ViewModels
 {

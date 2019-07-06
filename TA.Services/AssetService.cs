@@ -2,9 +2,8 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using TA.Contracts;
 using TA.Contracts.Services;
-using TA.Domains.Dtos;
+using TA.Domains.Models;
 using WebToolkit.Contracts.Data;
 using WebToolkit.Contracts.Providers;
 
@@ -15,44 +14,29 @@ namespace TA.Services
         private readonly IMapperProvider _mapperProvider;
         private readonly IRepository<Domains.Models.Asset> _assetRepository;
 
-        private Asset Map(Domains.Models.Asset asset)
-        {
-            return _mapperProvider.Map<Domains.Models.Asset, Asset>(asset);
-        }
-
-        private IEnumerable<Asset> Map(IEnumerable<Domains.Models.Asset> asset)
-        {
-            return _mapperProvider.Map<Domains.Models.Asset, Asset>(asset);
-        }
-        
-        private Domains.Models.Asset Map(Asset asset)
-        {
-            return _mapperProvider.Map<Asset, Domains.Models.Asset>(asset);
-        }
-
         public async Task<IEnumerable<Asset>> GetAssets(Site site, bool showInActive = false)
         {
-            return Map(await _assetRepository.
+            return await _assetRepository.
                 Query()
                 .Include(asset => asset.Site)
-                .Where(asset => asset.SiteId == site.Id && site.IsActive).ToArrayAsync());
+                .Where(asset => asset.SiteId == site.Id && site.IsActive).ToArrayAsync();
         }
 
         public async Task<Asset> GetAsset(Site site, string key, bool trackEntity)
         {
-            return Map(await _assetRepository.
+            return await _assetRepository.
                 Query(trackingQuery: trackEntity).FirstOrDefaultAsync(asset =>
-                asset.SiteId == site.Id && asset.Key == key));
+                asset.SiteId == site.Id && asset.Key == key);
         }
 
         public async Task<Asset> GetAsset(int assetId)
         {
-            return Map(await _assetRepository.DbSet.FindAsync(assetId));
+            return await _assetRepository.DbSet.FindAsync(assetId);
         }
 
         public async Task<Asset> SaveAsset(Asset asset, bool saveChanges = true)
         {
-            return Map(await _assetRepository.SaveChangesAsync(Map(asset), saveChanges));
+            return (await _assetRepository.SaveChangesAsync(asset, saveChanges));
         }
 
         public AssetService(IMapperProvider mapperProvider, IRepository<Domains.Models.Asset> assetRepository)

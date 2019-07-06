@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using TA.Domains.Contracts;
+using WebToolkit.Contracts;
 
 namespace TA.Domains.Models
 {

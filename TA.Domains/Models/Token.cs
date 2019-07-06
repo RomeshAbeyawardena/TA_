@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using TA.Domains.Contracts;
+using WebToolkit.Contracts;
 
 namespace TA.Domains.Models
 {

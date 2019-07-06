@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace TA.Contracts
+﻿namespace TA.Contracts
 {
     public interface INotification
     {

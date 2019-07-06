@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
-using TA.Contracts;
+﻿using System.Threading.Tasks;
 using TA.Contracts.Services;
 
 namespace TA.App
