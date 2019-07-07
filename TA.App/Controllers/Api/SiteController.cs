@@ -22,13 +22,14 @@ namespace TA.App.Controllers.Api
         {
             var mappedSite = Map<SiteViewModel, Site>(site);
             var savedSite = await _siteService.SaveSite(mappedSite);
+            await ClearSiteCache();
             return Ok(savedSite);
         }
 
         [HttpGet, RequiresApiKey(Permission.Read)]
         public async Task<ActionResult> GetSites(GetSitesViewModel getSitesViewModel)
         {
-            return Ok(await Sites);
+            return Ok(await (getSitesViewModel.ShowAll ? AllSites : Sites));
         }
     }
 }

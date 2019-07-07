@@ -1,14 +1,14 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 using WebToolkit.Contracts;
 
 namespace TA.Domains.Models
 {
-    public class Permission : ICreated, IModified
+    public class User : IIdentity, ICreated, IModified
     {
-        [Key] public int Id { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
+        public int Id { get; set; }
+        public Guid UserToken { get; set; }
+        public byte[] EmailAddress { get; set; }
+        public byte[] Password { get; set; }
         public bool IsActive { get; set; }
         public DateTimeOffset Created { get; set; }
         public DateTimeOffset Modified { get; set; }

@@ -24,7 +24,7 @@ namespace TA.Contracts.Services
         bool HasPermissions(Token token, IEnumerable<Permission> permission);
         Token GenerateToken(string tokenKey, DateTimeOffset expiryDate);
         Task<Token> SaveToken(Token generatedToken);
-        Task<IEnumerable<Token>> GetTokens();
+        Task<IEnumerable<Token>> GetTokens(bool showAll = false);
         Task<int> GetTokenMaxId();
     }
 }

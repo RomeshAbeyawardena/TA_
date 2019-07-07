@@ -40,6 +40,13 @@ namespace TA.App.Controllers
             }
         }
 
+        public async Task ClearCache(string key)
+        {
+            var cacheProvider = GetRequiredService<ICacheProvider>();
+
+            await cacheProvider.ClearByKey(key);
+        }
+
         public Task<IEnumerable<Token>> Tokens => 
             GetCacheAsync<Token, ITokenService>(Caching.TokenCacheKey, tokenService => tokenService.GetTokens());
 
@@ -50,5 +57,13 @@ namespace TA.App.Controllers
         public Task<IEnumerable<Site>> Sites =>
             GetCacheAsync<Site, ISiteService>(Caching.SiteCacheKey,
                 siteService => siteService.GetSites());
+
+        public Task<IEnumerable<Site>> AllSites =>
+            GetCacheAsync<Site, ISiteService>(Caching.AllSitesCacheKey,
+                siteService => siteService.GetSites(true));
+
+        public Task<IEnumerable<User>> Users =>
+            GetCacheAsync<User, IUserService>(Caching.UsersCacheKey, 
+                userService => userService.GetUsers());
     }
 }

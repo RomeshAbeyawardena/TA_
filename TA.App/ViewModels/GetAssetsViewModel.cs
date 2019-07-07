@@ -8,6 +8,6 @@ namespace TA.App.ViewModels
         public string SiteName { get; set; }
 
         [Required]
-        public bool ShowInActive { get; set; }
+        public bool ShowAll { get; set; }
     }
 }

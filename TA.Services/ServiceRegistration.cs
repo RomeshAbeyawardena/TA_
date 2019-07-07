@@ -21,12 +21,14 @@ namespace TA.Services
                 .AddDefaultValueProvider<Site>(site => { site.IsActive = true; })
                 .AddDefaultValueProvider<Asset>(asset => { asset.IsActive = true; })
                 .AddDefaultValueProvider<Token>(token => { token.IsActive = true; })
+                .AddDefaultValueProvider<User>(user => { user.IsActive = true; })
                 .AddDefaultValueProvider<Permission>()
                 .AddScoped<ITokenKeyGenerator, TokenKeyGenerator>()
                 .AddScoped<IPermissionService, PermissionService>()
                 .AddScoped<ISiteService, SiteService>()
                 .AddScoped<IAssetService, AssetService>()
                 .AddScoped<ITokenService, TokenService>()
+                .AddScoped<IUserService, UserService>()
                 .AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         }
     }

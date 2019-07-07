@@ -9,6 +9,6 @@ namespace TA.Contracts.Services
         Site GetSite(IEnumerable<Site> sites, string name);
         Task<Site> GetSite(int id);
         Task<Site> SaveSite(Site site, bool saveChanges = true);
-        Task<IEnumerable<Site>> GetSites(bool showInActive = false);
+        Task<IEnumerable<Site>> GetSites(bool showAll = false);
     }
 }

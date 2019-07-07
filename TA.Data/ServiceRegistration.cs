@@ -26,7 +26,8 @@ namespace TA.Data
                     typeof(Permission), 
                     typeof(Site), 
                     typeof(Token), 
-                    typeof(TokenPermission));
+                    typeof(TokenPermission),
+                    typeof(User));
         }
     }
 }

@@ -7,8 +7,8 @@
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.2.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="6.1.1" />
-    <PackageReference Include="WebToolkit.Contracts" Version="2.0.0.12" />
-    <PackageReference Include="WebToolkit.Common" Version="2.0.0.12" />
+    <PackageReference Include="WebToolkit.Contracts" Version="2.1.0.1" />
+    <PackageReference Include="WebToolkit.Common" Version="2.1.0.1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TA.Contracts\TA.Contracts.csproj" />
