@@ -14,12 +14,13 @@ namespace TA.Services
         private readonly IMapperProvider _mapperProvider;
         private readonly IRepository<Domains.Models.Asset> _assetRepository;
 
-        public async Task<IEnumerable<Asset>> GetAssets(Site site, bool showInActive = false)
+        public async Task<IEnumerable<Asset>> GetAssets(Site site, bool showAll = false)
         {
             return await _assetRepository.
-                Query()
+                Query(asset => asset.SiteId == site.Id 
+                               && showAll || site.IsActive)
                 .Include(asset => asset.Site)
-                .Where(asset => asset.SiteId == site.Id && site.IsActive).ToArrayAsync();
+                .ToArrayAsync();
         }
 
         public async Task<Asset> GetAsset(Site site, string key, bool trackEntity)

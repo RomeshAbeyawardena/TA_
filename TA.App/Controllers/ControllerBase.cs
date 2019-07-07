@@ -50,5 +50,9 @@ namespace TA.App.Controllers
         public Task<IEnumerable<Site>> Sites =>
             GetCacheAsync<Site, ISiteService>(Caching.SiteCacheKey,
                 siteService => siteService.GetSites());
+
+        public Task<IEnumerable<Site>> AllSites =>
+            GetCacheAsync<Site, ISiteService>(Caching.AllSitesCacheKey,
+                siteService => siteService.GetSites(true));
     }
 }

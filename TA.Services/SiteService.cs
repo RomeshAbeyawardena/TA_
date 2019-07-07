@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TA.Contracts.Services;
+using TA.Domains.Constants;
 using TA.Domains.Models;
 using WebToolkit.Contracts.Data;
 using WebToolkit.Contracts.Providers;
@@ -13,11 +14,6 @@ namespace TA.Services
     {
         private readonly IMapperProvider _mapperProvider;
         private readonly IRepository<Site> _siteRepository;
-
-        private IEnumerable<Site> Map(IEnumerable<Site> site)
-        {
-            return _mapperProvider.Map<Site, Site>(site);
-        }
 
         public SiteService(IMapperProvider mapperProvider, IRepository<Site> siteRepository)
         {
@@ -46,8 +42,8 @@ namespace TA.Services
 
         public async Task<IEnumerable<Site>> GetSites(bool showAll = false)
         {
-            return Map(await _siteRepository.Query(a => showAll 
-                                                        || a.IsActive).ToArrayAsync());
+            return await _siteRepository.Query(a => showAll 
+                                                        || a.IsActive).ToArrayAsync();
         }
     }
 }

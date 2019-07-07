@@ -28,7 +28,7 @@ namespace TA.App.Controllers.Api
         [HttpGet, RequiresApiKey(Permission.Read)]
         public async Task<ActionResult> GetSites(GetSitesViewModel getSitesViewModel)
         {
-            return Ok(await Sites);
+            return Ok(await (getSitesViewModel.ShowAll ? AllSites : Sites));
         }
     }
 }

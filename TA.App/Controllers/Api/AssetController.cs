@@ -39,7 +39,7 @@ namespace TA.App.Controllers.Api
         public async Task<ActionResult> GetAssets(GetAssetsViewModel getAssetsViewModel)
         {
             var site = await GetSiteByName(getAssetsViewModel.SiteName);
-            return Ok(await _assetService.GetAssets(site));
+            return Ok(await _assetService.GetAssets(site, getAssetsViewModel.ShowAll));
         }
     }
 }
