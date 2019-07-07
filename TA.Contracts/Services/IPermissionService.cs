@@ -7,6 +7,6 @@ namespace TA.Contracts.Services
     {
         Domains.Models.Permission GetPermissionByName(string permissionName,
             IEnumerable<Domains.Models.Permission> permissions);
-        Task<IEnumerable<Domains.Models.Permission>> GetPermissions();
+        Task<IEnumerable<Domains.Models.Permission>> GetPermissions(bool showAll = false);
     }
 }

@@ -51,20 +51,21 @@ CREATE TABLE [dbo].[Permission](
 		CONSTRAINT PK_Permission PRIMARY KEY
 	,[Name] VARCHAR(200) NOT NULL
 	,[Description] VARCHAR(2000) NOT NULL
+	,[IsActive] BIT NOT NULL
 	,[Created] DATETIMEOFFSET
 	,[Modified] DATETIMEOFFSET
 )
 
 SET IDENTITY_INSERT  [dbo].[Permission] ON
 
-INSERT INTO [dbo].[Permission]([Id],[Name],[Description],[Created],[Modified])
-	VALUES  (1, 'Create', 'Ability to create', @dateNow, @dateNow),
-			(2, 'Read', 'Ability to read', @dateNow, @dateNow),
-			(3, 'Update', 'Ability to update', @dateNow, @dateNow),
-			(4, 'SoftDelete', 'Ability to soft delete', @dateNow, @dateNow),
-			(5, 'Delete', 'Ability to delete', @dateNow, @dateNow),
-			(6, 'TokenManager', 'Ability to manage API tokens', @dateNow, @dateNow),
-			(7, 'ApiAccess', 'Ability to make API calls', @dateNow, @dateNow)
+INSERT INTO [dbo].[Permission]([Id],[Name],[Description],[IsActive],[Created],[Modified])
+	VALUES  (1, 'Create', 'Ability to create', 1, @dateNow, @dateNow),
+			(2, 'Read', 'Ability to read', 1, @dateNow, @dateNow),
+			(3, 'Update', 'Ability to update', 1, @dateNow, @dateNow),
+			(4, 'SoftDelete', 'Ability to soft delete', 1, @dateNow, @dateNow),
+			(5, 'Delete', 'Ability to delete', 1, @dateNow, @dateNow),
+			(6, 'TokenManager', 'Ability to manage API tokens', 1, @dateNow, @dateNow),
+			(7, 'ApiAccess', 'Ability to make API calls', 1, @dateNow, @dateNow)
 
 SET IDENTITY_INSERT  [dbo].[Permission] OFF
 

@@ -12,14 +12,14 @@ namespace TA.Services
     public class SiteService : ISiteService
     {
         private readonly IMapperProvider _mapperProvider;
-        private readonly IRepository<Domains.Models.Site> _siteRepository;
+        private readonly IRepository<Site> _siteRepository;
 
-        private IEnumerable<Site> Map(IEnumerable<Domains.Models.Site> site)
+        private IEnumerable<Site> Map(IEnumerable<Site> site)
         {
-            return _mapperProvider.Map<Domains.Models.Site, Site>(site);
+            return _mapperProvider.Map<Site, Site>(site);
         }
 
-        public SiteService(IMapperProvider mapperProvider, IRepository<Domains.Models.Site> siteRepository)
+        public SiteService(IMapperProvider mapperProvider, IRepository<Site> siteRepository)
         {
             _mapperProvider = mapperProvider;
             _siteRepository = siteRepository;
@@ -44,9 +44,10 @@ namespace TA.Services
                 .SaveChangesAsync(site, saveChanges);
         }
 
-        public async Task<IEnumerable<Site>> GetSites(bool showInActive = false)
+        public async Task<IEnumerable<Site>> GetSites(bool showAll = false)
         {
-            return Map(await _siteRepository.Query().Where(a => !showInActive || a.IsActive).ToArrayAsync());
+            return Map(await _siteRepository.Query(a => showAll 
+                                                        || a.IsActive).ToArrayAsync());
         }
     }
 }

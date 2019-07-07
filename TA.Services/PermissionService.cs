@@ -23,9 +23,10 @@ namespace TA.Services
                 permission.Name == permissionName);
         }
 
-        public async Task<IEnumerable<Permission>> GetPermissions()
+        public async Task<IEnumerable<Permission>> GetPermissions(bool showAll = false)
         {
-            return await _permissionRepository.Query().ToArrayAsync();
+            return await _permissionRepository.Query(permission => showAll 
+                                                                   || permission.IsActive).ToArrayAsync();
         }
     }
 }

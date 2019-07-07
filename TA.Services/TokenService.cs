@@ -64,9 +64,11 @@ namespace TA.Services
             return await _tokenRepository.SaveChangesAsync(generatedToken);
         }
 
-        public async Task<IEnumerable<Token>> GetTokens()
+        public async Task<IEnumerable<Token>> GetTokens(bool showAll = false)
         {
-            return await _tokenRepository.Query()
+            return await _tokenRepository.Query(token => showAll 
+                                                         || token.IsActive 
+                                                         && token.Expires > _dateTimeProvider.Now)
                 .Include(token => token.TokenPermissions)
                 .ToArrayAsync();
         }
