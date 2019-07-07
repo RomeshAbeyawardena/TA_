@@ -18,6 +18,13 @@ namespace TA.App.Controllers.Api
         }
 
         [HttpGet, RequiresApiKey(Permission.Read)]
+        public async Task<ActionResult> GetUsers()
+        {
+            var users = await Users;
+            return Ok(users);
+        }
+
+        [HttpGet, RequiresApiKey(Permission.Read)]
         public async Task<ActionResult> AuthenticateUser([FromBody] AuthenticateUserViewModel authenticateUserViewModel)
         {
             var users = await Users;

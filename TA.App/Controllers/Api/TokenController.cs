@@ -82,7 +82,7 @@ namespace TA.App.Controllers.Api
             return Ok(savedToken);
         }
         
-        [HttpPost]
+        [HttpPost, RequiresApiKey(Permission.Create)]
         public async Task<ActionResult> GenerateToken([FromBody] GenerateTokenViewModel generateTokenViewModel)
         {
             var expiryDate = DetermineExpiryDate();
