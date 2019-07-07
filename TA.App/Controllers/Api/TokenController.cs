@@ -78,6 +78,7 @@ namespace TA.App.Controllers.Api
             token.TokenPermissions = (await AssignTokenPermissions(generateTokenViewModel.Permissions)).ToList();
 
             var savedToken = await _tokenService.SaveToken(token);
+            await ClearTokenCache();
             return Ok(savedToken);
         }
         
@@ -93,6 +94,7 @@ namespace TA.App.Controllers.Api
                 generatedToken.TokenPermissions = (await AssignTokenPermissions(generateTokenViewModel.Permissions)).ToArray();
                 
             var savedToken = await _tokenService.SaveToken(generatedToken);
+            await ClearTokenCache();
             return Ok(savedToken);
         }
     }

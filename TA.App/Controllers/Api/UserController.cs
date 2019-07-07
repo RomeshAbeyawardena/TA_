@@ -31,8 +31,16 @@ namespace TA.App.Controllers.Api
         [HttpPost, RequiresApiKey(Permission.Create, Permission.Update, Permission.SoftDelete)]
         public async Task<ActionResult> SaveUser([FromBody] UserViewModel userViewModel)
         {
+            var users = await Users;
             var mappedUser = Map<UserViewModel, User>(userViewModel);
+            if (userViewModel.Id == default 
+                && _userService.GetUser(users, userViewModel.UserToken) != null
+                || _userService.GetUser(users, userViewModel.EmailAddress) != null)
+                return BadRequest();
+
             var user = await _userService.SaveUser(mappedUser);
+            await ClearUserCache();
+
             return Ok(user);
         }
     }

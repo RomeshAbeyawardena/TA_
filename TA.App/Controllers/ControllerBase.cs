@@ -40,6 +40,13 @@ namespace TA.App.Controllers
             }
         }
 
+        public async Task ClearCache(string key)
+        {
+            var cacheProvider = GetRequiredService<ICacheProvider>();
+
+            await cacheProvider.ClearByKey(key);
+        }
+
         public Task<IEnumerable<Token>> Tokens => 
             GetCacheAsync<Token, ITokenService>(Caching.TokenCacheKey, tokenService => tokenService.GetTokens());
 
