@@ -58,7 +58,7 @@ namespace TA.Services
             var hashedPassword = _cryptographyProvider
                 .HashBytes(HashAlgorithm.PasswordBytes, Encoding.ASCII.GetBytes(password), Data.PasswordSalt);
             return foundUser != null 
-                   && foundUser.Password == hashedPassword;
+                   && hashedPassword.SequenceEqual(foundUser.Password);
         }
 
         public UserService(IRepository<User> userRepository, ICryptographyProvider cryptographyProvider)

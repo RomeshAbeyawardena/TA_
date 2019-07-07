@@ -6,5 +6,6 @@
         public const string SiteCacheKey = "SitesCache";
         public const string TokenCacheKey = "TokenCache";
         public const string AllSitesCacheKey = "AllSitesCache";
+        public const string UsersCacheKey = "UsersCache";
     }
 }
